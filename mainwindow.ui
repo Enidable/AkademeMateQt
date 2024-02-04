@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1213</width>
     <height>600</height>
    </rect>
   </property>
@@ -17,18 +17,18 @@
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>381</width>
-      <height>351</height>
+      <x>10</x>
+      <y>10</y>
+      <width>451</width>
+      <height>541</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="TStart_button">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>50</y>
+      <x>820</x>
+      <y>10</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -37,12 +37,12 @@
      <string>Timer Start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="TStop_button">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>100</y>
-      <width>75</width>
+      <x>820</x>
+      <y>40</y>
+      <width>81</width>
       <height>24</height>
      </rect>
     </property>
@@ -50,14 +50,88 @@
      <string>Timer Stop</string>
     </property>
    </widget>
+   <widget class="QTableView" name="tableView_2">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>150</y>
+      <width>371</width>
+      <height>401</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="TLap_button">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>70</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Timer Lap</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="TReset_button">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>100</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Timer Reset</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelTimer">
+    <property name="geometry">
+     <rect>
+      <x>920</x>
+      <y>0</y>
+      <width>151</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>00:00:00</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="LapsTable">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>50</y>
+      <width>201</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>Laps</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Time</string>
+     </property>
+    </column>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>22</height>
+     <width>1213</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
