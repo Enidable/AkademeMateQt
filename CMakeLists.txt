@@ -12,12 +12,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+# Verzeichnis für Quellcode
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        StudyTimer.cpp
+    src/main.cpp
+    src/mainwindow.cpp
+    src/mainwindow.h
+    src/mainwindow.ui
+    src/StudyTimer.cpp
+    src/StudyTimer.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -39,7 +41,7 @@ else()
     else()
         add_executable(AkademeMateQt
             ${PROJECT_SOURCES}
-            Db_Input_Window.ui
+            src/Db_Input_Window.ui
         )
     endif()
 endif()

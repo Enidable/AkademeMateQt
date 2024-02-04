@@ -17,8 +17,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     lapsTable = ui->LapsTable;
      // Set individual column widths
-    lapsTable->setColumnWidth(0, 30);  // Set the width of the first column to 80 pixels
-    lapsTable->setColumnWidth(1, 60); // Set the width of the second column to 150 pixels
+    lapsTable->setColumnWidth(0, 30); 
+    lapsTable->setColumnWidth(1, 60); 
 
     // MainTable creation and column settings
     MainTable = ui->MainTable;
