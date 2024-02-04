@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     MainTable->setColumnWidth(1, 300);
     MainTable->setColumnWidth(2, 60);
     MainTable->setColumnWidth(3, 20);
-    MainTable->setColumnWidth(4, 80);
+    MainTable->setColumnWidth(4, 100);
 }
 
 void MainWindow::resetTimer() {

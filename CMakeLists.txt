@@ -20,6 +20,10 @@ set(PROJECT_SOURCES
     src/mainwindow.ui
     src/StudyTimer.cpp
     src/StudyTimer.h
+    src/sqlite_helper.h
+    src/sqlite_helper.cpp
+    src/sqlite_result.h
+    src/sqlite_result.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>1010</x>
-      <y>30</y>
+      <y>0</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>1010</x>
-      <y>60</y>
+      <y>30</y>
       <width>81</width>
       <height>24</height>
      </rect>
@@ -40,21 +40,11 @@
      <string>Timer Stop</string>
     </property>
    </widget>
-   <widget class="QTableView" name="tableView_2">
-    <property name="geometry">
-     <rect>
-      <x>920</x>
-      <y>170</y>
-      <width>171</width>
-      <height>381</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="TLap_button">
     <property name="geometry">
      <rect>
       <x>1010</x>
-      <y>90</y>
+      <y>60</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -67,7 +57,7 @@
     <property name="geometry">
      <rect>
       <x>1010</x>
-      <y>120</y>
+      <y>90</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -79,10 +69,10 @@
    <widget class="QLabel" name="labelTimer">
     <property name="geometry">
      <rect>
-      <x>1100</x>
-      <y>-20</y>
-      <width>151</width>
-      <height>71</height>
+      <x>1010</x>
+      <y>100</y>
+      <width>81</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
@@ -98,7 +88,7 @@
     <property name="geometry">
      <rect>
       <x>1100</x>
-      <y>30</y>
+      <y>0</y>
       <width>111</width>
       <height>192</height>
      </rect>
@@ -152,6 +142,59 @@
      </property>
     </column>
    </widget>
+   <widget class="QProgressBar" name="progressBar">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>530</y>
+      <width>501</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>24</number>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="DetailTable">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>0</y>
+      <width>301</width>
+      <height>521</height>
+     </rect>
+    </property>
+    <row>
+     <property name="text">
+      <string>Module</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Start date</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>End date</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Time investment</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Time estimation</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Progress</string>
+     </property>
+    </row>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -159,7 +202,7 @@
      <x>0</x>
      <y>0</y>
      <width>1213</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
