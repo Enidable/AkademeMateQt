@@ -14,21 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTableView" name="tableView">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>451</width>
-      <height>541</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="TStart_button">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>10</y>
+      <x>1010</x>
+      <y>30</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -40,8 +30,8 @@
    <widget class="QPushButton" name="TStop_button">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>40</y>
+      <x>1010</x>
+      <y>60</y>
       <width>81</width>
       <height>24</height>
      </rect>
@@ -53,18 +43,18 @@
    <widget class="QTableView" name="tableView_2">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>150</y>
-      <width>371</width>
-      <height>401</height>
+      <x>920</x>
+      <y>170</y>
+      <width>171</width>
+      <height>381</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="TLap_button">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>70</y>
+      <x>1010</x>
+      <y>90</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -76,8 +66,8 @@
    <widget class="QPushButton" name="TReset_button">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>100</y>
+      <x>1010</x>
+      <y>120</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -89,8 +79,8 @@
    <widget class="QLabel" name="labelTimer">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>0</y>
+      <x>1100</x>
+      <y>-20</y>
       <width>151</width>
       <height>71</height>
      </rect>
@@ -107,20 +97,58 @@
    <widget class="QTableWidget" name="LapsTable">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>50</y>
-      <width>201</width>
+      <x>1100</x>
+      <y>30</y>
+      <width>111</width>
       <height>192</height>
      </rect>
     </property>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>60</number>
+    </attribute>
     <column>
      <property name="text">
-      <string>Laps</string>
+      <string>Lap</string>
      </property>
     </column>
     <column>
      <property name="text">
       <string>Time</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="MainTable">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>701</width>
+      <height>561</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>Abkürzung</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Module</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Semester</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Note</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Nachweis</string>
      </property>
     </column>
    </widget>
@@ -131,7 +159,7 @@
      <x>0</x>
      <y>0</y>
      <width>1213</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

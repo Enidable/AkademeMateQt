@@ -16,6 +16,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(studyTimer, &StudyTimer::lapsUpdated, this, &MainWindow::updateLapsTable);
 
     lapsTable = ui->LapsTable;
+     // Set individual column widths
+    lapsTable->setColumnWidth(0, 30);  // Set the width of the first column to 80 pixels
+    lapsTable->setColumnWidth(1, 60); // Set the width of the second column to 150 pixels
+
+    // MainTable creation and column settings
+    MainTable = ui->MainTable;
+    MainTable->setColumnWidth(0, 70);
+    MainTable->setColumnWidth(1, 300);
+    MainTable->setColumnWidth(2, 60);
+    MainTable->setColumnWidth(3, 20);
+    MainTable->setColumnWidth(4, 80);
 }
 
 void MainWindow::resetTimer() {
@@ -71,33 +82,3 @@ void MainWindow::updateLapsTable(const QStringList &laps) {
         lapsTable->setItem(i, 1, lapTimeItem);
     }
 }
-
-/* void MainWindow::updateLapsTable(const QStringList &laps) {
-    lapsTable->clearContents();
-    lapsTable->setRowCount(laps.size());
-
-    for (int i = 0; i < laps.size(); ++i) {
-        int lapSeconds = laps[i].toInt();
-
-        // Calculate hours, minutes, and seconds
-        int hours = lapSeconds / 3600;
-        int minutes = (lapSeconds % 3600) / 60;
-        int seconds = lapSeconds % 60;
-
-        // Format the time as "HH:MM:SS"
-        QString formattedTime = QString("%1:%2:%3")
-                                   .arg(hours, 2, 10, QLatin1Char('0'))
-                                   .arg(minutes, 2, 10, QLatin1Char('0'))
-                                   .arg(seconds, 2, 10, QLatin1Char('0'));
-
-        // Create a QTableWidgetItem with the formatted time
-        QTableWidgetItem *lapNumberItem = new QTableWidgetItem(QString::number(i + 1)); // Lap number
-        QTableWidgetItem *lapTimeItem = new QTableWidgetItem(formattedTime); // Lap time
-
-        // Set lap number in the first column (column 0)
-        lapsTable->setItem(i, 0, lapNumberItem);
-
-        // Set lap time in the second column (column 1)
-        lapsTable->setItem(i, 1, lapTimeItem);
-    }
-} */

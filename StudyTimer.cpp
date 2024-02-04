@@ -42,10 +42,17 @@ void StudyTimer::reset() {
 void StudyTimer::lap() {
     if (startTime != TimePoint()) {
         TimePoint lapTime = Clock::now();
-        Duration lapDuration = lapTime - startTime;
-        laps.push_back(std::chrono::duration_cast<std::chrono::seconds>(lapDuration));
-        emit lapsUpdated(displayLaps());
-    } 
+        if (laps.empty()) {
+            Duration lapDuration = lapTime - startTime;
+            laps.push_back(std::chrono::duration_cast<std::chrono::seconds>(lapDuration));
+            emit lapsUpdated(displayLaps());
+        } else {
+            // Calculate the lap duration by subtracting the sum of previous laps from lapTime
+            Duration lapDuration = lapTime - (startTime + std::accumulate(laps.begin(), laps.end(), Duration::zero()));
+            laps.push_back(std::chrono::duration_cast<std::chrono::seconds>(lapDuration));
+            emit lapsUpdated(displayLaps());
+        }
+    }
 }
 
 void StudyTimer::displayElapsedTime() const {

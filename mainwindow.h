@@ -25,5 +25,6 @@ private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;
     QTableWidget *lapsTable;
+    QTableWidget *MainTable;
 };
 #endif // MAINWINDOW_H
