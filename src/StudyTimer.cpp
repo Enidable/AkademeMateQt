@@ -15,33 +15,53 @@ StudyTimer::~StudyTimer() {
 }
 
 void StudyTimer::start() {
-    startTime = Clock::now();
-    pauseTime = TimePoint();
-    timer->start(1000);  // Set the timer interval to 1 second, without this the timer does not run!
+    if (isPaused) {
+        // If paused, resume from the paused time
+        TimePoint now = Clock::now();
+        Duration pausedDuration = now - pauseTime;
+        startTime += pausedDuration;
+        pauseTime = TimePoint();
+        isPaused = false;
+    } 
+    else if (timer->isActive()) {
+        return;  // Timer is already running, do nothing
+    } else {
+        // If not paused, start as usual
+        startTime = Clock::now();
+        pauseTime = TimePoint();
+        timer->start(1000);
+    }
+
+    timer->start(1000);  // Start the timer interval to 1 second
 }
 
 void StudyTimer::pause() {
-    if (startTime != TimePoint()) {
+    if (!isPaused && startTime != TimePoint()) {
         pauseTime = Clock::now();
-        elapsedTime += pauseTime - startTime;
-        startTime = TimePoint();
-        timer->stop();  // Stop the timer when paused
+        isPaused = true;
+        timer->stop();
     }
 }
 
 void StudyTimer::reset() {
+    timer->stop();  // Stop the timer first
+
+    // Reset timer values
     startTime = TimePoint();
     pauseTime = TimePoint();
     elapsedTime = Duration::zero();
+    isPaused = false;  // Reset the paused state
     laps.clear();
-    timer->stop();  // Stop the timer when resetting
-    emit timerUpdated(0);  // Reset the displayed timer
+
+    // Emit signals
+    emit timerUpdated(0);
     emit lapsUpdated(displayLaps());
 }
 
 void StudyTimer::lap() {
-    if (startTime != TimePoint()) {
+    if (startTime != TimePoint() && !isPaused) {
         TimePoint lapTime = Clock::now();
+
         if (laps.empty()) {
             Duration lapDuration = lapTime - startTime;
             laps.push_back(std::chrono::duration_cast<std::chrono::seconds>(lapDuration));

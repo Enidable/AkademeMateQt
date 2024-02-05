@@ -18,6 +18,7 @@ private:
     TimePoint startTime;
     TimePoint pauseTime;
     Duration elapsedTime;
+    bool isPaused;                              // Flag to track pause state, previous error exclusion
     std::vector<Duration> laps;
 
     QTimer* timer;                              // Add QTimer pointer for handling intervals

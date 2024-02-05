@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
     connect(ui->TStop_button, &QPushButton::clicked, studyTimer, &StudyTimer::pause);
-    connect(ui->TReset_button, &QPushButton::clicked, studyTimer, &StudyTimer::reset);
     connect(ui->TLap_button, &QPushButton::clicked, studyTimer, &StudyTimer::lap);
+    connect(ui->TReset_button, &QPushButton::clicked, studyTimer, &StudyTimer::reset);
 
      // Connect StudyTimer signals to MainWindow slots
     connect(studyTimer, &StudyTimer::timerUpdated, this, &MainWindow::updateTimerLabel);
