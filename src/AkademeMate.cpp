@@ -5,7 +5,6 @@
  */
 
 #include "sqlite_helper.h"
-#include "StudyTimer.h"
 using namespace std;
 
 /**
