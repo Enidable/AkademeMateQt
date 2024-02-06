@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include "StudyTimer.h"
 #include <QTableWidget>
+#include <QTableView>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 #include <QStringList>
 #include <QtSql/QSqlError>
+#include <QtSql/QSqlQueryModel>
 #include <QDebug>
 
 QT_BEGIN_NAMESPACE
@@ -29,11 +31,13 @@ private slots:
     void updateLapsTable(const QStringList &laps);
     void resetTimer();  // Declaration of the resetTimer function
     // Tables
+    void openDatabaseConnection();
     void displayDatabaseInTable();
 private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;
     QTableWidget *lapsTable;
-    QTableWidget *MainTable;
+    QTableView *MainTable;
+    QSqlDatabase database;
 };
 #endif // MAINWINDOW_H

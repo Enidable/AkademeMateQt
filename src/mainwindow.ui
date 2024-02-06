@@ -107,16 +107,6 @@
      </property>
     </column>
    </widget>
-   <widget class="QTableWidget" name="MainTable">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>791</width>
-      <height>521</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
@@ -169,6 +159,42 @@
       <string>Progress</string>
      </property>
     </row>
+   </widget>
+   <widget class="QTableView" name="MainTable">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>791</width>
+      <height>521</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Load_db_button">
+    <property name="geometry">
+     <rect>
+      <x>1010</x>
+      <y>460</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Table</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="connect_db_button">
+    <property name="geometry">
+     <rect>
+      <x>1010</x>
+      <y>410</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Connect Data base</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
