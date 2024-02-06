@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-/* #include "sqlite_helper.h"
-#include "sqlite_result.h" */
+#include "sqlite_helper.h"
+#include "sqlite_result.h"
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this))
 {
@@ -21,14 +22,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
      // Set individual column widths
     lapsTable->setColumnWidth(0, 30); 
     lapsTable->setColumnWidth(1, 60); 
-
-    // MainTable creation and column settings
-    MainTable = ui->MainTable;
-    MainTable->setColumnWidth(0, 70);
-    MainTable->setColumnWidth(1, 300);
-    MainTable->setColumnWidth(2, 60);
-    MainTable->setColumnWidth(3, 20);
-    MainTable->setColumnWidth(4, 100);
 }
 
 void MainWindow::resetTimer() {
@@ -83,4 +76,58 @@ void MainWindow::updateLapsTable(const QStringList &laps) {
         // Set lap time in the second column (column 1)
         lapsTable->setItem(i, 1, lapTimeItem);
     }
+}
+
+void MainWindow::displayDatabaseInTable()
+{
+    // Connect to the SQLite database
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("data/Module.db");
+
+    if (!db.open()) {
+        qDebug() << "Error: Unable to open database";
+        return;
+    }
+
+    // Execute a SELECT query to retrieve data
+    QSqlQuery query("SELECT * FROM Module_table");
+
+    // Check if the query executed successfully
+    if (!query.exec()) {
+        qDebug() << "Error: Unable to execute query";
+        db.close();
+        return;
+    }
+
+    // Clear existing contents in MainTable
+    ui->MainTable->clearContents();
+    ui->MainTable->setRowCount(0);
+
+    // Set column names dynamically based on the result set
+    QSqlRecord record = query.record();
+    int columnCount = record.count();
+    QStringList columnNames;
+
+    for (int col = 0; col < columnCount; ++col) {
+        columnNames.append(record.fieldName(col));
+    }
+
+    ui->MainTable->setColumnCount(columnCount);
+    ui->MainTable->setHorizontalHeaderLabels(columnNames);
+
+    // Populate MainTable with data from the query
+    int row = 0;
+    while (query.next()) {
+        ui->MainTable->insertRow(row);
+
+        for (int col = 0; col < columnCount; ++col) {
+            QTableWidgetItem *item = new QTableWidgetItem(query.value(col).toString());
+            ui->MainTable->setItem(row, col, item);
+        }
+
+        ++row;
+    }
+
+    // Close the database connection
+    db.close();
 }

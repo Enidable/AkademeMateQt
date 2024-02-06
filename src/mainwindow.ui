@@ -112,35 +112,10 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>701</width>
+      <width>791</width>
       <height>521</height>
      </rect>
     </property>
-    <column>
-     <property name="text">
-      <string>Abbreviation</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Module</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Semester</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Note</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Completion</string>
-     </property>
-    </column>
    </widget>
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
@@ -158,9 +133,9 @@
    <widget class="QTableWidget" name="DetailTable">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>800</x>
       <y>0</y>
-      <width>301</width>
+      <width>201</width>
       <height>521</height>
      </rect>
     </property>

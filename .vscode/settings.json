@@ -1,3 +1,9 @@
 {
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "qsqlquery": "cpp",
+        "qsqldatabase": "cpp",
+        "qstringlist": "cpp",
+        "qsqlrecord": "cpp"
+    }
 }
