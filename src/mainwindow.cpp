@@ -1,8 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "sqlite_helper.h"
-#include "sqlite_result.h"
-
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this))
 {
@@ -17,6 +14,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
      // Connect StudyTimer signals to MainWindow slots
     connect(studyTimer, &StudyTimer::timerUpdated, this, &MainWindow::updateTimerLabel);
     connect(studyTimer, &StudyTimer::lapsUpdated, this, &MainWindow::updateLapsTable);
+
+    // Connect Load Database button to function
+    connect(ui->connect_db_button, &QPushButton::clicked, this, &MainWindow::openDatabaseConnection);
+    connect(ui->Load_db_button, &QPushButton::clicked, this, &MainWindow::displayDatabaseInTable);
 
     lapsTable = ui->LapsTable;
      // Set individual column widths
@@ -35,7 +36,7 @@ void MainWindow::resetTimer() {
             }
         }
     }
-}
+} 
 
 MainWindow::~MainWindow()
 {
@@ -78,56 +79,52 @@ void MainWindow::updateLapsTable(const QStringList &laps) {
     }
 }
 
-void MainWindow::displayDatabaseInTable()
-{
-    // Connect to the SQLite database
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("data/Module.db");
+void MainWindow::openDatabaseConnection() {
+    // Check if the database connection is already open
+    if (database.isOpen()) {
+        return;
+    }
+    // Add the SQLite driver
+    database = QSqlDatabase::addDatabase("QSQLITE");
+    // Set the database name
+    database.setDatabaseName("C:/Users/tev87/Documents/Studium/SWE22/Programm/AkademeMateQt/data/Module.db");
+    // Open the database
+    if (!database.open()) {
+        qDebug() << "Error: Unable to open database connection";
+        return;
+    }
+}
 
-    if (!db.open()) {
-        qDebug() << "Error: Unable to open database";
+void MainWindow::displayDatabaseInTable() {
+    // Create a QSqlQueryModel to hold your data
+    QSqlQueryModel *model = new QSqlQueryModel();
+    
+    QString queryStr = "SELECT * FROM \"Studium Zeitmanagement - db (1)\"";
+    
+    qDebug() << "Is the database open?" << database.isOpen();  // Debug Statement 1
+
+    // Set the query to the model
+    model->setQuery(queryStr);
+
+    // Debug Statement 2
+    if (!model->query().executedQuery().isEmpty()) {
+        qDebug() << "Query executed successfully:" << model->query().executedQuery();
+    } else {
+        qDebug() << "Error executing query:" << model->query().lastError().text();
         return;
     }
 
-    // Execute a SELECT query to retrieve data
-    QSqlQuery query("SELECT * FROM Module_table");
+    // Debug Statements 3 and 4
+    qDebug() << "Number of rows:" << model->rowCount();
+    qDebug() << "Number of columns:" << model->columnCount();
 
-    // Check if the query executed successfully
-    if (!query.exec()) {
-        qDebug() << "Error: Unable to execute query";
-        db.close();
-        return;
-    }
+    // Create a QTableView
+    QTableView *tableView = new QTableView();
 
-    // Clear existing contents in MainTable
-    ui->MainTable->clearContents();
-    ui->MainTable->setRowCount(0);
+    // Set the model for MainTable
+    MainTable->setModel(model);
 
-    // Set column names dynamically based on the result set
-    QSqlRecord record = query.record();
-    int columnCount = record.count();
-    QStringList columnNames;
+    setCentralWidget(tableView);
 
-    for (int col = 0; col < columnCount; ++col) {
-        columnNames.append(record.fieldName(col));
-    }
-
-    ui->MainTable->setColumnCount(columnCount);
-    ui->MainTable->setHorizontalHeaderLabels(columnNames);
-
-    // Populate MainTable with data from the query
-    int row = 0;
-    while (query.next()) {
-        ui->MainTable->insertRow(row);
-
-        for (int col = 0; col < columnCount; ++col) {
-            QTableWidgetItem *item = new QTableWidgetItem(query.value(col).toString());
-            ui->MainTable->setItem(row, col, item);
-        }
-
-        ++row;
-    }
-
-    // Close the database connection
-    db.close();
+    tableView->resizeColumnsToContents();
 }
