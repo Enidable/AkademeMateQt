@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this))
 {
@@ -11,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->TLap_button, &QPushButton::clicked, studyTimer, &StudyTimer::lap);
     connect(ui->TReset_button, &QPushButton::clicked, studyTimer, &StudyTimer::reset);
 
-     // Connect StudyTimer signals to MainWindow slots
+    // Connect StudyTimer signals to MainWindow slots
     connect(studyTimer, &StudyTimer::timerUpdated, this, &MainWindow::updateTimerLabel);
     connect(studyTimer, &StudyTimer::lapsUpdated, this, &MainWindow::updateLapsTable);
 
@@ -20,11 +21,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->Load_db_button, &QPushButton::clicked, this, &MainWindow::displayDatabaseInTable);
 
     lapsTable = ui->LapsTable;
-     // Set individual column widths
-    lapsTable->setColumnWidth(0, 30); 
-    lapsTable->setColumnWidth(1, 60); 
+    // Set individual column widths
+    lapsTable->setColumnWidth(0, 30);
+    lapsTable->setColumnWidth(1, 60);
 }
 
+/*
+// This function can be removed (also remove declaration in mainwindow.h or we get a compile error)
 void MainWindow::resetTimer() {
     // Clear the data in the existing lapsTable, keeping the column names intact
     for (int row = 0; row < lapsTable->rowCount(); ++row) {
@@ -36,7 +39,8 @@ void MainWindow::resetTimer() {
             }
         }
     }
-} 
+}
+*/
 
 MainWindow::~MainWindow()
 {
@@ -50,7 +54,7 @@ void MainWindow::updateTimerLabel(int seconds) {
     int minutes = (seconds % 3600) / 60;
     int remainingSeconds = seconds % 60;
 
- // Format the time components as a string
+// Format the time components as a string
     QString formattedTime = QString("%1:%2:%3")
                                 .arg(hours, 2, 10, QLatin1Char('0'))
                                 .arg(minutes, 2, 10, QLatin1Char('0'))
@@ -87,10 +91,15 @@ void MainWindow::openDatabaseConnection() {
     // Add the SQLite driver
     database = QSqlDatabase::addDatabase("QSQLITE");
     // Set the database name
-    database.setDatabaseName("C:/Users/tev87/Documents/Studium/SWE22/Programm/AkademeMateQt/data/Module.db");
+    // executable will be in /build, so use a relative path from there to find find db in directory data
+    database.setDatabaseName("../data/Module.db");
     // Open the database
     if (!database.open()) {
         qDebug() << "Error: Unable to open database connection";
+                return;
+    }else {
+        qDebug() << "Database connection is open";
+        QMessageBox::information(this, "Success", "Database connection is open");
         return;
     }
 }
@@ -109,21 +118,21 @@ void MainWindow::displayDatabaseInTable() {
     // Debug Statement 2
     if (!model->query().executedQuery().isEmpty()) {
         qDebug() << "Query executed successfully:" << model->query().executedQuery();
-    } else {
+            } else {
         qDebug() << "Error executing query:" << model->query().lastError().text();
-        return;
+                return;
     }
 
     // Debug Statements 3 and 4
     qDebug() << "Number of rows:" << model->rowCount();
     qDebug() << "Number of columns:" << model->columnCount();
-
+    
     // Create a QTableView
     QTableView *tableView = new QTableView();
-
+    
     // Set the model for MainTable
     MainTable->setModel(model);
-
+    
     setCentralWidget(tableView);
 
     tableView->resizeColumnsToContents();

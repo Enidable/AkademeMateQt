@@ -29,7 +29,7 @@ private slots:
     // Timer
     void updateTimerLabel(int seconds);
     void updateLapsTable(const QStringList &laps);
-    void resetTimer();  // Declaration of the resetTimer function
+    // void resetTimer();  // Declaration of the resetTimer function; not used anymore (deleted)
     // Tables
     void openDatabaseConnection();
     void displayDatabaseInTable();
