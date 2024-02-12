@@ -27,6 +27,8 @@ set(PROJECT_SOURCES
     #src/sqlite_result.cpp
 )
 
+add_subdirectory(src/sqlimport)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AkademeMateQt
         MANUAL_FINALIZATION

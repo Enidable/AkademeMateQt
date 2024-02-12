@@ -109,7 +109,7 @@ void MainWindow::displayDatabaseInTable() {
     // Create a QSqlQueryModel to hold your data
     QSqlQueryModel *model = new QSqlQueryModel();
     
-    QString queryStr = "SELECT * FROM \"Studium Zeitmanagement - db (1)\"";
+    QString queryStr = "SELECT * FROM \"Module\"";
     
     qDebug() << "Is the database open?" << database.isOpen();  // Debug Statement 1
 
