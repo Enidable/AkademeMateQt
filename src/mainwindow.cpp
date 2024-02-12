@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Set individual column widths
     lapsTable->setColumnWidth(0, 30);
     lapsTable->setColumnWidth(1, 60);
+    MainTable = ui->MainTable;
 }
 
 /*
@@ -128,12 +129,14 @@ void MainWindow::displayDatabaseInTable() {
     qDebug() << "Number of columns:" << model->columnCount();
     
     // Create a QTableView
-    QTableView *tableView = new QTableView();
+    // QTableView *tableView = new QTableView();
+    qDebug() << "QTableView created";
     
     // Set the model for MainTable
     MainTable->setModel(model);
+    qDebug() << "Model set";
     
-    setCentralWidget(tableView);
+    // setCentralWidget(tableView);
 
-    tableView->resizeColumnsToContents();
+    // tableView->resizeColumnsToContents();
 }
