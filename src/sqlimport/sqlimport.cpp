@@ -11,6 +11,7 @@
 #include <sqlite3.h>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>  // for std::count
 
 // Constants for file names and table names
 const std::string CSV_FILE_NAME = "modules-export.csv";
@@ -109,36 +110,79 @@ int main() {
         return -1;
     }
 
-    // Process each line in the CSV file
-    std::string line;
-    while (std::getline(file, line)) {
-        // Skip empty lines if required
-        if (SKIP_EMPTY_LINES && line.find_first_not_of(", \t\n") == std::string::npos) {
-            continue;
-        }
-
-        // Parse data from the CSV line
-        std::istringstream ss(line);
-        StudiumData data;
-        std::getline(ss, data.Module, ',');
-        std::getline(ss, data.Abkuerzung, ',');
-        ss >> data.Semester;
-        std::getline(ss >> std::ws, data.Anfang, ',');
-        std::getline(ss, data.Abschluss, ',');
-        ss >> data.Benoetigte_Zeit_Minuten;
-        std::getline(ss, data.Note, ',');
-        char SOKChar, TOKChar;
-        ss >> SOKChar >> TOKChar;
-        data.SOK = (SOKChar == 'x');
-        data.TOK = (TOKChar == 'x');
-        std::string assignment;
-        ss >> assignment;
-        data.Assignment = assignment.length();
-        ss >> data.ECTS;
-
-        // Insert data into the database
-        insertData(db, data);
+// Process each line in the CSV file
+std::string line;
+while (std::getline(file, line)) {
+    // Skip empty lines if required
+    if (SKIP_EMPTY_LINES && line.find_first_not_of(", \t\n") == std::string::npos) {
+        continue;
     }
+
+    // Parse data from the CSV line
+    std::istringstream ss(line);
+    StudiumData data;
+    
+    // Debug: Output the entire CSV line
+    std::cout << "CSV Line: " << line << std::endl;
+
+    std::getline(ss, data.Module, ',');
+    std::cout << "Module: " << data.Module << std::endl;
+
+    std::getline(ss, data.Abkuerzung, ',');
+    std::cout << "Abkuerzung: " << data.Abkuerzung << std::endl;
+
+    ss >> data.Semester;
+    std::cout << "Semester: " << data.Semester << std::endl;
+    // consume the comma
+    std::getline(ss >> std::ws, line, ',');
+
+    std::getline(ss >> std::ws, data.Anfang, ',');
+    std::cout << "Anfang: " << data.Anfang << std::endl;
+
+    std::getline(ss, data.Abschluss, ',');
+    std::cout << "Abschluss: " << data.Abschluss << std::endl;
+
+    ss >> data.Benoetigte_Zeit_Minuten;
+    std::cout << "Benoetigte_Zeit_Minuten: " << data.Benoetigte_Zeit_Minuten << std::endl;
+    // consume the comma
+    std::getline(ss >> std::ws, line, ',');
+
+    // consume hours
+    std::getline(ss >> std::ws, line, ',');
+
+
+    std::getline(ss, data.Note, ',');
+    std::cout << "Note: " << data.Note << std::endl;
+
+    char SOKChar, TOKChar;
+    ss >> SOKChar >> TOKChar;
+    data.SOK = (SOKChar == 'x');
+    data.TOK = (TOKChar == 'x');
+    std::cout << "SOK: " << data.SOK << ", TOK: " << data.TOK << std::endl;
+
+    // Read the assignments line
+    std::string assignmentLine;
+    std::getline(ss, assignmentLine, ',');
+
+    // Count the number of 'x' characters in the assignments line
+    data.Assignment = std::count(assignmentLine.begin(), assignmentLine.end(), 'x');
+    std::cout << "Assignment: " << data.Assignment << std::endl;
+
+    // Debug: Output the remaining line
+    std::string remainingLine;
+    std::getline(ss, remainingLine);
+    std::cout << "Remaining Line: " << remainingLine << std::endl;
+
+    // Read the ECTS value
+    ss >> data.ECTS;
+    std::cout << "ECTS: " << data.ECTS << std::endl;
+
+    // Debug: Output a separator line
+    std::cout << "------------------------" << std::endl;
+
+    // Insert data into the database
+    insertData(db, data);
+}
 
     // Close the SQLite database
     sqlite3_close(db);

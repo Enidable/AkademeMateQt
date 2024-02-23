@@ -1,0 +1,46 @@
+Module,Abkürzung,Semester,Anfang,Abschluss,"benötigte Zeit, in Minuten",Stunden,Note,SOK,TOK,Assignment,ECTS
+Schlüsselqualifikationen für Studium und Beruf,SQF24,1,06/07/2022,03/10/2022,4800,80,Bestanden,,,x,5
+Grundlagen des Wirtschaftens,BWL25,1,07/07/2022,28/08/2022,2388,39.8,2,x,,,5
+Grundlagen der Informatik und Programmierung für Ingenieure,PRG25,1,05/10/2022,05/11/2022,2370,39.5,1.7,x,,,5
+Grundlagen Mathematik,MAT32,1,07/07/2022,08/10/2022,3600,60,1,x,,,5
+Grundlagen der Werkstoffkunde,WST23,1,06/10/2022,03/12/2022,3300,55,1.3,,x,,5
+Elektrotechnik Grundlagen,ELT01,1,09/08/2022,28/01/2023,4962,82.7,2,x,,,5
+,,,,,,,,,,,
+Grundlagen der Mathematik 2,MAT33,2,06/11/2022,19/02/2023,3414,56.9,2.7,,,x,5
+Grundlagenphysik für Ingenieure,PHY20,2,21/11/2022,19/07/2023,5229,87.15,2.3,x,,,5
+Programmieren in C/C++,CPP22,2,07/12/2022,04/02/2023,4743,79.05,4,,x,,5
+Grundlagen der Statik und Festigkeitslehre,TME20,2,19/01/2023,06/05/2023,8022,133.7,1,,x,,5
+Elektronik Grundlagen,ELT02,2,20/02/2023,23/04/2023,3600,60,1.3,x,,,5
+Grundlagen der Digital-Technik,ELT30,2,02/04/2023,25/06/2023,3453,57.55,1.3,,,x,5
+,,,,,,,,,,,
+Integral Transformationen,MAT31,3,14/07/2023,04/11/2023,6120,102,2,,x,,5
+Physik für Ingenieure II,PHY23,3,31/07/2023,28/10/2023,5067,84.45,2,,x,,5
+Microcomputersysteme mit Labor,MCS41,3,13/07/2023,28/08/2023,4149,69.15,1.3,,,x,5
+Maschinenelemente Grundlagen,KON29,3,13/07/2023,28/09/2023,6255,104.25,2.3,x,,x,5
+Messtechnik,AUT20,3,09/08/2023,23/09/2023,3600,60,1,,,xx,5
+Rechnergestütze Konstruktion,KON31,3,03/02/2024,22/03/2024,1089,18.15,,,,xx,5
+,,,,,,,,,,,
+Vertiefung Werkstofftechnik,WST24,4,18/12/2023,17/02/2024,3720,62,,,x,x,5
+Steuerungs- und Regelungstechnik,REG23,4,02/10/2023,23/12/2023,4653,77.55,1.3,x,,x,5
+Softwareentwicklung für Ingenieure,SWE22,4,07/11/2023,04/03/2024,468,7.8,,,,x,5
+Systemtheorie,SYS41,4,12/12/2023,10/03/2024,939,15.65,,x,,,5
+Dynamik,TME03,4,04/03/2024,06/04/2024,,,,,x,,5
+Maschinenelemente und Produktentwicklungsprozess,KON32,4,11/03/2024,30/04/2024,,,,,,x,5
+,,,,,,,,,,,
+Systemmodellierung,SYS42,5,,,,,,,,x,5
+Mechatronische Wandler,AUT22,5,,04/05/2024,,,,,x,,5
+Echtzeitsysteme,EBS65,5,,01/06/2024,,,,,x,,5
+Grundlagen der Automatisierungstechnik,AUT01,5,,06/07/2024,,,,,x,,5
+Prozess- und Fertigungsautomatisierung,AUT41,5,,,,,,,,x,5
+Robotik,ROB40,5,,03/08/2024,,,,,x,,5
+,,,,,,,,,,,
+English for technology,EFT03,6,,,,,,x,,,5
+Labor Automatisierungstechnik,AUT43,6,,,,,,,,x,5
+Industrie Roboterprogrammierung,FTE22,6,09/09/2024,18/09/2024,,,,,,x,5
+Projektbericht,BEMTP2,6,,01/02/2025,,,,,,,15
+,,,,,,,,,,,
+Projektwerkstatt,PWS40,7,,,,,,,,x,5
+"Vertiefung, Wahlfach: Robotik",,7,,09/11/2024,,,,,,,
+,,,,,,,,,,,
+sonstiger zeitliche Aufwand für das Studium,,,,,1830,30.5,,,,,
+Bachelor Arbeit,BEMTT1,,14/12/2024,,,,,,,,10

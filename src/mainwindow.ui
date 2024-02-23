@@ -169,6 +169,12 @@
       <height>521</height>
      </rect>
     </property>
+    <property name="maximumSize">
+     <size>
+      <width>791</width>
+      <height>521</height>
+     </size>
+    </property>
    </widget>
    <widget class="QPushButton" name="Load_db_button">
     <property name="geometry">
@@ -215,11 +221,17 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
