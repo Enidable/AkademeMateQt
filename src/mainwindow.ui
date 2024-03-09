@@ -126,7 +126,7 @@
       <x>800</x>
       <y>0</y>
       <width>201</width>
-      <height>521</height>
+      <height>211</height>
      </rect>
     </property>
     <row>
@@ -159,6 +159,11 @@
       <string>Progress</string>
      </property>
     </row>
+    <row>
+     <property name="text">
+      <string>Credentials</string>
+     </property>
+    </row>
    </widget>
    <widget class="QTableView" name="MainTable">
     <property name="geometry">
@@ -179,8 +184,8 @@
    <widget class="QPushButton" name="Load_db_button">
     <property name="geometry">
      <rect>
-      <x>1010</x>
-      <y>460</y>
+      <x>1080</x>
+      <y>480</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -192,8 +197,8 @@
    <widget class="QPushButton" name="connect_db_button">
     <property name="geometry">
      <rect>
-      <x>1010</x>
-      <y>410</y>
+      <x>1080</x>
+      <y>430</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -201,6 +206,61 @@
     <property name="text">
      <string>Connect Data base</string>
     </property>
+   </widget>
+   <widget class="QTableWidget" name="variable_detail_table">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>250</y>
+      <width>271</width>
+      <height>271</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="select_details">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>220</y>
+      <width>201</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>-</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Assignment current time investment</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Assignment time estimation</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Exam current time investment</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Exam time estimation</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Laboratory report current time investment</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Laboratory report time estimation</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
