@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>DbInputWindow</class>
+ <widget class="QDialog" name="DbInputWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1153</width>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Input</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="centralwidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>50</y>
+     <width>491</width>
+     <height>481</height>
+    </rect>
+   </property>
    <widget class="QLineEdit" name="short_name_label">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>200</x>
       <y>70</y>
       <width>71</width>
       <height>24</height>
@@ -27,7 +35,7 @@
    <widget class="QLineEdit" name="Long_Name">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>200</x>
       <y>100</y>
       <width>251</width>
       <height>24</height>
@@ -39,12 +47,12 @@
      <rect>
       <x>50</x>
       <y>70</y>
-      <width>101</width>
+      <width>121</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Modul Abkürzung:</string>
+     <string>Module abbreviation:</string>
     </property>
    </widget>
    <widget class="QLabel" name="long_name_label">
@@ -57,7 +65,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Modul Name:</string>
+     <string>Module name:</string>
     </property>
    </widget>
    <widget class="QLabel" name="semester_label">
@@ -78,18 +86,18 @@
      <rect>
       <x>50</x>
       <y>160</y>
-      <width>111</width>
+      <width>141</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Leistungsnachweis:</string>
+     <string>Performance assessment:</string>
     </property>
    </widget>
    <widget class="QComboBox" name="Semester_select">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>200</x>
       <y>130</y>
       <width>72</width>
       <height>24</height>
@@ -139,7 +147,7 @@
    <widget class="QComboBox" name="M_K_A_select">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>200</x>
       <y>160</y>
       <width>251</width>
       <height>24</height>
@@ -167,11 +175,24 @@
     </item>
     <item>
      <property name="text">
-      <string>Laborbericht</string>
+      <string>Laboratory report</string>
      </property>
     </item>
    </widget>
    <widget class="QLabel" name="start_date_label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>220</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start date:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="end_date_label">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -181,40 +202,27 @@
      </rect>
     </property>
     <property name="text">
-     <string>Start Datum:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="end_date_label">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>280</y>
-      <width>71</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>End Datum:</string>
+     <string>End date:</string>
     </property>
    </widget>
    <widget class="QLabel" name="time_min_label">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>310</y>
+      <y>280</y>
       <width>101</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Zeit in Minuten:</string>
+     <string>Time in minutes:</string>
     </property>
    </widget>
    <widget class="QLabel" name="note_label">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>340</y>
+      <y>310</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -223,11 +231,11 @@
      <string>Note:</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="Note_menu">
+   <widget class="QComboBox" name="Note_Box">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>340</y>
+      <x>200</x>
+      <y>310</y>
       <width>72</width>
       <height>24</height>
      </rect>
@@ -296,8 +304,8 @@
    <widget class="QDateEdit" name="Start_dateEdit">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>250</y>
+      <x>200</x>
+      <y>220</y>
       <width>110</width>
       <height>25</height>
      </rect>
@@ -306,18 +314,18 @@
    <widget class="QDateEdit" name="End_dateEdit">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>280</y>
+      <x>200</x>
+      <y>250</y>
       <width>110</width>
       <height>25</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="Time_Input">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>310</y>
+      <x>200</x>
+      <y>280</y>
       <width>113</width>
       <height>24</height>
      </rect>
@@ -327,7 +335,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>370</y>
+      <y>340</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -340,7 +348,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>400</y>
+      <y>370</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -349,11 +357,11 @@
      <string>Status:</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="ECTS_Box">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>370</y>
+      <x>200</x>
+      <y>340</y>
       <width>72</width>
       <height>24</height>
      </rect>
@@ -374,28 +382,28 @@
      </property>
     </item>
    </widget>
-   <widget class="QComboBox" name="comboBox_2">
+   <widget class="QComboBox" name="status_box">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>400</y>
+      <x>200</x>
+      <y>370</y>
       <width>111</width>
       <height>24</height>
      </rect>
     </property>
     <item>
      <property name="text">
-      <string>inaktiv</string>
+      <string>inactive</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>aktiv</string>
+      <string>active</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>abgeschlossen</string>
+      <string>completed</string>
      </property>
     </item>
    </widget>
@@ -415,7 +423,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Module Eingabefenster</string>
+     <string>Module input window</string>
     </property>
    </widget>
    <widget class="QLabel" name="M_K_A_label_2">
@@ -423,31 +431,18 @@
      <rect>
       <x>50</x>
       <y>190</y>
-      <width>111</width>
+      <width>151</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Leistungsnachweis 2:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="M_K_A_label_3">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>220</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Leistungsnachweis 3:</string>
+     <string>Performance assessment 2:</string>
     </property>
    </widget>
    <widget class="QComboBox" name="M_K_A_select_2">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>200</x>
       <y>190</y>
       <width>251</width>
       <height>24</height>
@@ -475,90 +470,23 @@
     </item>
     <item>
      <property name="text">
-      <string>Laborbericht</string>
+      <string>Laboratory report</string>
      </property>
     </item>
    </widget>
-   <widget class="QComboBox" name="M_K_A_select_3">
+   <widget class="QPushButton" name="submitbutton">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>220</y>
-      <width>251</width>
-      <height>24</height>
+      <x>330</x>
+      <y>410</y>
+      <width>111</width>
+      <height>31</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>-</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Sofort Online Klausur</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Termin Online Klausur</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Assignment</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Laborbericht</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QFrame" name="input_frame">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>401</width>
-      <height>411</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::WinPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <property name="lineWidth">
-     <number>5</number>
+    <property name="text">
+     <string>Submit</string>
     </property>
    </widget>
-   <zorder>input_frame</zorder>
-   <zorder>short_name_label</zorder>
-   <zorder>Long_Name</zorder>
-   <zorder>short_name</zorder>
-   <zorder>long_name_label</zorder>
-   <zorder>semester_label</zorder>
-   <zorder>M_K_A_label</zorder>
-   <zorder>Semester_select</zorder>
-   <zorder>M_K_A_select</zorder>
-   <zorder>start_date_label</zorder>
-   <zorder>end_date_label</zorder>
-   <zorder>time_min_label</zorder>
-   <zorder>note_label</zorder>
-   <zorder>Note_menu</zorder>
-   <zorder>Start_dateEdit</zorder>
-   <zorder>End_dateEdit</zorder>
-   <zorder>lineEdit</zorder>
-   <zorder>ects_label</zorder>
-   <zorder>status_label</zorder>
-   <zorder>comboBox</zorder>
-   <zorder>comboBox_2</zorder>
-   <zorder>label</zorder>
-   <zorder>M_K_A_label_2</zorder>
-   <zorder>M_K_A_label_3</zorder>
-   <zorder>M_K_A_select_2</zorder>
-   <zorder>M_K_A_select_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -582,7 +510,16 @@
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>3</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

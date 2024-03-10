@@ -20,28 +20,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->connect_db_button, &QPushButton::clicked, this, &MainWindow::openDatabaseConnection);
     connect(ui->Load_db_button, &QPushButton::clicked, this, &MainWindow::displayDatabaseInTable);
 
+    // Add or edit module button to function
+    connect(ui->AddModuleButton, &QPushButton::clicked, this, &MainWindow::addModuleclicked);
+
     lapsTable = ui->LapsTable;
     // Set individual column widths
     lapsTable->setColumnWidth(0, 30);
     lapsTable->setColumnWidth(1, 60);
     MainTable = ui->MainTable;
 }
-
-/*
-// This function can be removed (also remove declaration in mainwindow.h or we get a compile error)
-void MainWindow::resetTimer() {
-    // Clear the data in the existing lapsTable, keeping the column names intact
-    for (int row = 0; row < lapsTable->rowCount(); ++row) {
-        for (int col = 0; col < lapsTable->columnCount(); ++col) {
-            QTableWidgetItem* item = lapsTable->item(row, col);
-            if (item) {
-                delete item;  // Delete the item to clear the content
-                lapsTable->setItem(row, col, nullptr);  // Set the item to nullptr
-            }
-        }
-    }
-}
-*/
 
 MainWindow::~MainWindow()
 {
@@ -137,6 +124,12 @@ void MainWindow::displayDatabaseInTable() {
     qDebug() << "Model set";
     
     // setCentralWidget(tableView);
-
     // tableView->resizeColumnsToContents();
+}
+
+//Open input window for editing and or adding modules
+void MainWindow::addModuleclicked()
+{
+    DbInputWindow inputWindow;
+    inputWindow.exec();
 }

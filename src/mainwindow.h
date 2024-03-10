@@ -13,6 +13,7 @@
 #include <QtSql/QSqlQueryModel>
 #include <QDebug>
 #include "ColorDelegate.h"
+#include "DbInputWindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,6 +35,7 @@ private slots:
     // Tables
     void openDatabaseConnection();
     void displayDatabaseInTable();
+    void addModuleclicked();
 private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;

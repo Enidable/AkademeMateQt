@@ -13,7 +13,7 @@ void ColorDelegate::initStyleOption(QStyleOptionViewItem* option, const QModelIn
     QStyledItemDelegate::initStyleOption(option, index);
 
     // Status column has to be the last column of the table for the program to select the right column
-QString status = index.model()->data(index.model()->index(index.row(), index.model()->columnCount() - 1), Qt::UserRole + 1).toString();
+QString status = index.model()->data(index.model()->index(index.row(), index.model()->columnCount() - 1), Qt::DisplayRole).toString();
 /* QString statusColumnName = "Status";
 int statusColumnIndex = index.model()->query().record().indexOf(statusColumnName);
 QString status = index.model()->data(index.model()->index(index.row(), statusColumnIndex), Qt::DisplayRole).toString(); */
