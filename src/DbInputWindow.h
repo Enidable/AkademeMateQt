@@ -7,6 +7,7 @@
 #include <QtGui/QPalette>
 #include <QComboBox>
 #include <QDialog>
+#include "mainwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DbInputWindow; }

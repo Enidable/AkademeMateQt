@@ -13,6 +13,7 @@
 #include <QtSql/QSqlQueryModel>
 #include <QDebug>
 #include "ColorDelegate.h"
+#include "DbManager.h"
 #include "DbInputWindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -33,14 +34,13 @@ private slots:
     void updateLapsTable(const QStringList &laps);
     // void resetTimer();  // Declaration of the resetTimer function; not used anymore (deleted)
     // Tables
-    void openDatabaseConnection();
-    void displayDatabaseInTable();
+    //void openDatabaseConnection();
+    //void displayDatabaseInTable();
     void addModuleclicked();
 private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;
     QTableWidget *lapsTable;
     QTableView *MainTable;
-    QSqlDatabase database;
 };
 #endif // MAINWINDOW_H

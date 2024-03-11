@@ -26,6 +26,8 @@ set(PROJECT_SOURCES
     src/StudyTimer.h
     src/DbInputWindow.h
     src/DbInputWindow.cpp
+    src/DbManager.h
+    src/DbManager.cpp
 )
 
 set(PROJECT_UIS

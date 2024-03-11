@@ -5,6 +5,8 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this))
 {
     ui->setupUi(this);
+    // Create instance for opening and accessing database
+    DbManager dbManager;
 
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
@@ -17,8 +19,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(studyTimer, &StudyTimer::lapsUpdated, this, &MainWindow::updateLapsTable);
 
     // Connect Load Database button to function
-    connect(ui->connect_db_button, &QPushButton::clicked, this, &MainWindow::openDatabaseConnection);
-    connect(ui->Load_db_button, &QPushButton::clicked, this, &MainWindow::displayDatabaseInTable);
+    connect(ui->connect_db_button, &QPushButton::clicked, [&](){ dbManager.openDatabaseConnection(); });
+    connect(ui->Load_db_button, &QPushButton::clicked, [&](){ dbManager.displayDatabaseInTable(ui->MainTable); });
 
     // Add or edit module button to function
     connect(ui->AddModuleButton, &QPushButton::clicked, this, &MainWindow::addModuleclicked);
@@ -27,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Set individual column widths
     lapsTable->setColumnWidth(0, 30);
     lapsTable->setColumnWidth(1, 60);
-    MainTable = ui->MainTable;
 }
 
 MainWindow::~MainWindow()
@@ -71,6 +72,7 @@ void MainWindow::updateLapsTable(const QStringList &laps) {
     }
 }
 
+/*
 void MainWindow::openDatabaseConnection() {
     // Check if the database connection is already open
     if (database.isOpen()) {
@@ -125,7 +127,7 @@ void MainWindow::displayDatabaseInTable() {
     
     // setCentralWidget(tableView);
     // tableView->resizeColumnsToContents();
-}
+} */
 
 //Open input window for editing and or adding modules
 void MainWindow::addModuleclicked()
