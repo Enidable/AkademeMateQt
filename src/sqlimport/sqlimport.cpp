@@ -10,10 +10,11 @@
 #include <sqlite3.h>
 #include <sstream>
 #include <iomanip>
+#include <stdexcept>
 #include <algorithm> // for std::count
 
 // Constants for file names and table names
-const std::string CSV_FILE_NAME = "modules-export.csv";
+const std::string CSV_FILE_NAME = "modules-export-new.csv";
 const std::string DATABASE_FILE_NAME = "Module.db";
 const std::string TABLE_NAME = "Module";
 
@@ -27,16 +28,18 @@ const bool SKIP_EMPTY_LINES = true;
 struct StudiumData
 {
     std::string Module;
-    std::string Abkuerzung;
+    std::string Abbrev;
     int Semester;
-    std::string Anfang;
-    std::string Abschluss;
-    int Benoetigte_Zeit_Minuten;
+    std::string Start;
+    std::string End;
+    int Minutes;
     std::string Note;
     bool SOK;
     bool TOK;
     int Assignment;
+    bool LAB;
     int ECTS;
+    std::string Status;
 };
 
 /**
@@ -81,11 +84,11 @@ void insertData(sqlite3 *db, const StudiumData &data)
 {
     std::stringstream ss;
     ss << "INSERT INTO " << TABLE_NAME << " VALUES ('" << data.Module << "', '"
-       << data.Abkuerzung << "', " << data.Semester << ", '"
-       << data.Anfang << "', '" << data.Abschluss << "', "
-       << data.Benoetigte_Zeit_Minuten << ", '" << data.Note << "', "
-       << data.SOK << ", " << data.TOK << ", " << data.Assignment << ", "
-       << data.ECTS << ");";
+       << data.Abbrev << "', " << data.Semester << ", '"
+       << data.Start << "', '" << data.End << "', "
+       << data.Minutes << ", '" << data.Note << "', "
+       << data.SOK << ", " << data.TOK << ", " << data.Assignment << ", " << data.LAB << ", "
+       << data.ECTS << ", '" << data.Status << "');";
 
     executeSQLCommand(db, ss.str());
 }
@@ -106,7 +109,7 @@ int main()
 
     // Create the table if it does not exist
     executeSQLCommand(db, "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
-                              " (Module TEXT, Abkuerzung TEXT, Semester INTEGER, Anfang DATE, Abschluss DATE, Benoetigte_Zeit_Minuten INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, Assignment INTEGER, ECTS INTEGER);");
+                              " (Module TEXT, Abbreviation TEXT, Semester INTEGER, Start DATE, End DATE, Minutes INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, Assignment INTEGER, LAB BOOLEAN, ECTS INTEGER, Status TEXT);");
 
     // Open the CSV file for reading
     std::ifstream file(CSV_FILE_NAME);
@@ -151,9 +154,9 @@ int main()
         }
         std::cout << "Module: " << data.Module << std::endl;
 
-        // Read Abkuerzung
-        std::getline(ss, data.Abkuerzung, ',');
-        std::cout << "Abkuerzung: " << data.Abkuerzung << std::endl;
+        // Read Abbreviation
+        std::getline(ss, data.Abbrev, ',');
+        std::cout << "Abbreviation: " << data.Abbrev << std::endl;
 
         // Read Semester as string
         std::string semesterStr;
@@ -162,22 +165,22 @@ int main()
         data.Semester = (!semesterStr.empty()) ? std::stoi(semesterStr) : 0;
         std::cout << "Semester: " << data.Semester << std::endl;
 
-        // Read Anfang
-        std::getline(ss, data.Anfang, ',');
-        std::cout << "Anfang: " << data.Anfang << std::endl;
+        // Read Start
+        std::getline(ss, data.Start, ',');
+        std::cout << "Start: " << data.Start << std::endl;
 
-        // Read Abschluss
-        std::getline(ss, data.Abschluss, ',');
-        std::cout << "Abschluss: " << data.Abschluss << std::endl;
+        // Read End
+        std::getline(ss, data.End, ',');
+        std::cout << "End: " << data.End << std::endl;
 
-        // Read Benoetigte_Zeit_Minuten as string
+        // Read Minutes as string
         std::string benoetigteZeitStr;
         std::getline(ss, benoetigteZeitStr, ',');
         // Convert Benoetigte_Zeit_Minuten to integer or set to NULL if empty
-        data.Benoetigte_Zeit_Minuten = (!benoetigteZeitStr.empty()) ? std::stoi(benoetigteZeitStr) : 0;
-        std::cout << "Benoetigte_Zeit_Minuten: " << data.Benoetigte_Zeit_Minuten << std::endl;
+        data.Minutes = (!benoetigteZeitStr.empty()) ? std::stoi(benoetigteZeitStr) : 0;
+        std::cout << "Minutes: " << data.Minutes << std::endl;
 
-        // Consume hours
+        // Hours
         std::getline(ss >> std::ws, line, ',');
 
         // Read Note
@@ -197,14 +200,40 @@ int main()
         std::string assignment;
         std::getline(ss, assignment, ',');
         data.Assignment = std::count(assignment.begin(), assignment.end(), 'x');
-        std::cout << "Assignment: " << data.Assignment << std::endl;
+        std::cout << "ASS: " << data.Assignment << std::endl;
+
+        // Read Laboratory as string
+        std::string LABStr;
+        std::getline(ss, LABStr, ',');
+        // Convert LAB to boolean
+        data.LAB = (LABStr == "x");
+        std::cout << "LAB: " << data.LAB << std::endl;
 
         // Read ECTS as string
         std::string ectsStr;
         ss >> ectsStr;
-        // Convert ECTS to integer or set to NULL if empty
-        data.ECTS = (!ectsStr.empty()) ? std::stoi(ectsStr) : 0;
+
+        // Convert ECTS to integer or set to 0 if empty or invalid
+        try {
+            if (!ectsStr.empty()) {
+                data.ECTS = std::stoi(ectsStr);
+            } else {
+                data.ECTS = 0;
+            }
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid ECTS value: " << ectsStr << ". Setting ECTS to 0." << std::endl;
+            data.ECTS = 0;
+        } catch (const std::out_of_range& e) {
+            std::cerr << "ECTS value out of range: " << ectsStr << ". Setting ECTS to 0." << std::endl;
+            data.ECTS = 0;
+        }
+
         std::cout << "ECTS: " << data.ECTS << std::endl;
+
+
+        // Read Status
+        std::getline(ss, data.Status, ',');
+        std::cout << "Status: " << data.Status << std::endl;
 
         // Debug: Output a separator line
         std::cout << "------------------------" << std::endl;

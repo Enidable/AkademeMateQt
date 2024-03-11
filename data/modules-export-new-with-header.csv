@@ -1,0 +1,48 @@
+Module,Abbreviation,Semester,Start,End,Minutes,Hours,Note,SOK,TOK,ASS,Laboratory,ECTS,Status
+Schlüsselqualifikationen für Studium und Beruf,SQF24,1,06/07/2022,03/10/2022,4800,80,Bestanden,,,x,,5,completed
+Grundlagen des Wirtschaftens,BWL25,1,07/07/2022,28/08/2022,2388,39.8,2,x,,,,5,completed
+Grundlagen der Informatik und Programmierung für Ingenieure,PRG25,1,05/10/2022,05/11/2022,2370,39.5,1.7,x,,,,5,completed
+Grundlagen Mathematik,MAT32,1,07/07/2022,08/10/2022,3600,60,1,x,,,,5,completed
+Grundlagen der Werkstoffkunde,WST23,1,06/10/2022,03/12/2022,3300,55,1.3,,x,,,5,completed
+Elektrotechnik Grundlagen,ELT01,1,09/08/2022,28/01/2023,4962,82.7,2,x,,,,5,completed
+,,,,,,,,,,,,,
+Grundlagen der Mathematik 2,MAT33,2,06/11/2022,19/02/2023,3414,56.9,2.7,,,x,,5,completed
+Grundlagenphysik für Ingenieure,PHY20,2,21/11/2022,19/07/2023,5229,87.15,2.3,x,,,,5,completed
+Programmieren in C/C++,CPP22,2,07/12/2022,04/02/2023,4743,79.05,4,,x,,,5,completed
+Grundlagen der Statik und Festigkeitslehre,TME20,2,19/01/2023,06/05/2023,8022,133.7,1,,x,,,5,completed
+Elektronik Grundlagen,ELT02,2,20/02/2023,23/04/2023,3600,60,1.3,x,,,,5,completed
+Grundlagen der Digital-Technik,ELT30,2,02/04/2023,25/06/2023,3453,57.55,1.3,,,x,x,5,completed
+,,,,,,,,,,,,,
+Integral Transformationen,MAT31,3,14/07/2023,04/11/2023,6120,102,2,,x,,,5,completed
+Physik für Ingenieure II,PHY23,3,31/07/2023,28/10/2023,5067,84.45,2,,x,,,5,completed
+Microcomputersysteme mit Labor,MCS41,3,13/07/2023,28/08/2023,4149,69.15,1.3,,,x,x,5,completed
+Maschinenelemente Grundlagen,KON29,3,13/07/2023,28/09/2023,6255,104.25,2.3,x,,x,,5,completed
+Messtechnik,AUT20,3,09/08/2023,23/09/2023,3600,60,1,,,xx,x,5,completed
+Rechnergestütze Konstruktion,KON31,3,03/02/2024,22/03/2024,2718,45.3,1,,,xx,x,5,completed
+,,,,,,,,,,,,,
+Vertiefung Werkstofftechnik,WST24,4,18/12/2023,17/02/2024,3720,62,,,x,x,x,5,completed
+Steuerungs- und Regelungstechnik,REG23,4,02/10/2023,23/12/2023,4653,77.55,1.3,x,,x,,5,completed
+Softwareentwicklung für Ingenieure,SWE22,4,07/11/2023,19/03/2024,3540,59,,,,x,,5,active
+Systemtheorie,SYS41,4,12/12/2023,10/03/2024,939,15.65,,x,,,,5,active
+Dynamik,TME03,4,04/03/2024,06/04/2024,,,,,x,,,5,inactive
+Maschinenelemente und Produktentwicklungsprozess,KON32,4,11/03/2024,30/04/2024,,,,,,x,,5,inactive
+,,,,,,,,,,,,,
+Systemmodellierung,SYS42,5,,,,,,,,x,,5,inactive
+Mechatronische Wandler,AUT22,5,,04/05/2024,,,,,x,,,5,inactive
+Echtzeitsysteme,EBS65,5,,01/06/2024,,,,,x,,,5,inactive
+Grundlagen der Automatisierungstechnik,AUT01,5,,06/07/2024,,,,,x,,,5,inactive
+Prozess- und Fertigungsautomatisierung,AUT41,5,,,,,,,,x,,5,inactive
+Robotik,ROB40,5,,03/08/2024,,,,,x,,,5,inactive
+,,,,,,,,,,,,,
+English for technology,EFT03,6,,,,,,x,,,,5,inactive
+Labor Automatisierungstechnik,AUT43,6,,,,,,,,x,x,5,inactive
+Industrie Roboterprogrammierung,FTE22,6,09/09/2024,18/09/2024,,,,,,x,x,5,inactive
+Projektbericht,BEMTP2,6,,01/02/2025,,,,,,,,15,inactive
+,,,,,,,,,,,,,
+Projektwerkstatt,PWS40,7,,,,,,,,x,,5,inactive
+Lernalgorithmen und Neuronale Netze,SYD40,7,,,,,,,,x,,5,inactive
+Mehrrobotersysteme,ROB20,7,,,,,,,x,,,5,inactive
+Maschinelles Sehen,ROB41,7,,,,,,,,x,,5,inactive
+Bachelor Arbeit,BEMTT1,7,,,,,,,,,,10,inactive
+,,,,,,,,,,,,,
+Sonstige Zeitaufwand für das Studium,,,,,1944,32.4,,,,,,,active
