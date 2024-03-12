@@ -4,9 +4,8 @@
 #include <QSqlQuery>
 
 
-::DbInputWindow::DbInputWindow(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DbInputWindow)
+DbInputWindow::DbInputWindow(QWidget *parent) :
+    QDialog(parent), ui(new Ui::DbInputWindow), dbManager()
 {
     ui->setupUi(this);
     connect(ui->submitbutton, &QPushButton::clicked, this, &DbInputWindow::onSubmitButtonClicked);
@@ -16,6 +15,9 @@
     xtok = false;
     xlab = false;
     xass = 0;
+
+    // Open the database connection
+    dbManager.openDatabaseConnection();
 }
 
 DbInputWindow::~DbInputWindow()
@@ -44,10 +46,34 @@ void DbInputWindow::onSubmitButtonClicked()
     xlab = m_k_a == "Laboratory report" || m_k_a_2 == "Laboratory report";
     xass = (m_k_a == "Assignment") + (m_k_a_2 == "Assignment");
 
-/*
+    // Check if the database connection is open
+    if (!dbManager.getDatabase().isOpen()) {
+        qDebug() << "Error: Database connection not open.";
+        return;
+    }
 
-    // Add input values to the database table
-     qDebug() << "Insert into database:" << short_name << long_name << semester << xsok << xtok << xlab << xass << start_date << end_date << time_min << note << ects << status;
+    // Create a QSqlQuery object
+    QSqlQuery query(dbManager.getDatabase());
+
+    // Prepare the SQL INSERT statement
+    QString sql = "INSERT INTO MainTable (Abbreviation, Module, Semester, Start, End, Minutes, Note, SOK, TOK, Assignment, LAB, ECTS, Status) "
+                  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    // Bind the input values to the query parameters
+    query.prepare(sql);
+    query.addBindValue(short_name);
+    query.addBindValue(long_name);
+    query.addBindValue(semester);
+    query.addBindValue(start_date);
+    query.addBindValue(end_date);
+    query.addBindValue(time_min);
+    query.addBindValue(note);
+    query.addBindValue(xsok);
+    query.addBindValue(xtok);
+    query.addBindValue(xass);
+    query.addBindValue(xlab);
+    query.addBindValue(ects);
+    query.addBindValue(status);
 
     // Execute the query
     if (query.exec()) {
@@ -55,7 +81,7 @@ void DbInputWindow::onSubmitButtonClicked()
     } else {
         qDebug() << "Error adding module:" << query.lastError();
     }
-*/
+
     // Close input window
     close();
 }

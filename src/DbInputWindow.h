@@ -7,7 +7,9 @@
 #include <QtGui/QPalette>
 #include <QComboBox>
 #include <QDialog>
+#include <QSqlDatabase>
 #include "mainwindow.h"
+#include "DbManager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DbInputWindow; }
@@ -26,6 +28,7 @@ private slots:
 
 private:
     Ui::DbInputWindow *ui;
+    DbManager dbManager;
     bool xsok;
     bool xtok;
     bool xlab;
