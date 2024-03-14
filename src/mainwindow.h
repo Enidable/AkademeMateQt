@@ -32,15 +32,15 @@ private slots:
     // Timer
     void updateTimerLabel(int seconds);
     void updateLapsTable(const QStringList &laps);
-    // void resetTimer();  // Declaration of the resetTimer function; not used anymore (deleted)
+
     // Tables
-    //void openDatabaseConnection();
-    //void displayDatabaseInTable();
     void addModuleclicked();
 private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;
     QTableWidget *lapsTable;
     QTableView *MainTable;
+    DbManager *dbManager; // Add a pointer to a DbManager instance
+    DbInputWindow *dbInputwindow;
 };
 #endif // MAINWINDOW_H

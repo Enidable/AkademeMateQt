@@ -2,11 +2,12 @@
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this))
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this)), dbManager(new DbManager(this)), dbInputwindow(new DbInputWindow(this))
 {
     ui->setupUi(this);
-    // Create instance for opening and accessing database
-    DbManager dbManager;
+
+    // Open the database connection
+    dbManager->openDatabaseConnection();
 
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
@@ -18,9 +19,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(studyTimer, &StudyTimer::timerUpdated, this, &MainWindow::updateTimerLabel);
     connect(studyTimer, &StudyTimer::lapsUpdated, this, &MainWindow::updateLapsTable);
 
-    // Connect Load Database button to function
-    connect(ui->connect_db_button, &QPushButton::clicked, [&](){ dbManager.openDatabaseConnection(); });
-    connect(ui->Load_db_button, &QPushButton::clicked, [&](){ dbManager.displayDatabaseInTable(ui->MainTable); });
+    // Connect Load Database button to function (remove the connection to openDatabaseConnection())
+    connect(ui->Load_db_button, &QPushButton::clicked, [&](){ dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase()); }); // Use the arrow operator to call the function on the DbManager pointer
 
     // Add or edit module button to function
     connect(ui->AddModuleButton, &QPushButton::clicked, this, &MainWindow::addModuleclicked);
@@ -35,6 +35,11 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete studyTimer;
+    delete dbManager; 
+    delete dbInputwindow;
+
+    // Close the database connection
+    dbManager->getDatabase().close();
 }
 
 void MainWindow::updateTimerLabel(int seconds) {
@@ -71,63 +76,6 @@ void MainWindow::updateLapsTable(const QStringList &laps) {
         lapsTable->setItem(i, 1, lapTimeItem);
     }
 }
-
-/*
-void MainWindow::openDatabaseConnection() {
-    // Check if the database connection is already open
-    if (database.isOpen()) {
-        return;
-    }
-    // Add the SQLite driver
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    // Set the database name
-    // executable will be in /build, so use a relative path from there to find find db in directory data
-    database.setDatabaseName("../data/Module.db");
-    // Open the database
-    if (!database.open()) {
-        qDebug() << "Error: Unable to open database connection";
-                return;
-    }else {
-        qDebug() << "Database connection is open";
-        QMessageBox::information(this, "Success", "Database connection is open");
-        return;
-    }
-}
-
-void MainWindow::displayDatabaseInTable() {
-    // Create a QSqlQueryModel to hold your data
-    QSqlQueryModel *model = new QSqlQueryModel();
-    
-    QString queryStr = "SELECT * FROM \"Module\"";
-    
-    qDebug() << "Is the database open?" << database.isOpen();  // Debug Statement 1
-
-    // Set the query to the model
-    model->setQuery(queryStr);
-
-    // Debug Statement 2
-    if (!model->query().executedQuery().isEmpty()) {
-        qDebug() << "Query executed successfully:" << model->query().executedQuery();
-            } else {
-        qDebug() << "Error executing query:" << model->query().lastError().text();
-                return;
-    }
-
-    // Debug Statements 3 and 4
-    qDebug() << "Number of rows:" << model->rowCount();
-    qDebug() << "Number of columns:" << model->columnCount();
-    
-    // Create a QTableView
-    // QTableView *tableView = new QTableView();
-    qDebug() << "QTableView created";
-    
-    // Set the model for MainTable
-    MainTable->setModel(model);
-    qDebug() << "Model set";
-    
-    // setCentralWidget(tableView);
-    // tableView->resizeColumnsToContents();
-} */
 
 //Open input window for editing and or adding modules
 void MainWindow::addModuleclicked()

@@ -8,7 +8,8 @@
 #include <QComboBox>
 #include <QDialog>
 #include <QSqlDatabase>
-#include "mainwindow.h"
+#include <QMessageBox>
+#include <QSqlQuery>
 #include "DbManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,7 +29,7 @@ private slots:
 
 private:
     Ui::DbInputWindow *ui;
-    DbManager dbManager;
+    DbManager *dbManager;
     bool xsok;
     bool xtok;
     bool xlab;

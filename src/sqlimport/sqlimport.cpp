@@ -83,7 +83,7 @@ void executeSQLCommand(sqlite3 *db, const std::string &sql)
 void insertData(sqlite3 *db, const StudiumData &data)
 {
     std::stringstream ss;
-    ss << "INSERT INTO " << TABLE_NAME << " VALUES ('" << data.Module << "', '"
+    ss << "INSERT INTO " << TABLE_NAME << " (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, Assignment, LAB, ECTS, Status) VALUES ('" << data.Module << "', '"
        << data.Abbrev << "', " << data.Semester << ", '"
        << data.Start << "', '" << data.End << "', "
        << data.Minutes << ", '" << data.Note << "', "
@@ -109,7 +109,7 @@ int main()
 
     // Create the table if it does not exist
     executeSQLCommand(db, "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
-                              " (Module TEXT, Abbreviation TEXT, Semester INTEGER, Start DATE, End DATE, Minutes INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, Assignment INTEGER, LAB BOOLEAN, ECTS INTEGER, Status TEXT);");
+                              " (ID INTEGER PRIMARY KEY AUTOINCREMENT, Module TEXT, Abbreviation TEXT, Semester INTEGER, Start DATE, End DATE, Minutes INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, Assignment INTEGER, LAB BOOLEAN, ECTS INTEGER, Status TEXT);");
 
     // Open the CSV file for reading
     std::ifstream file(CSV_FILE_NAME);
