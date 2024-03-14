@@ -9,6 +9,8 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QSqlError>
+#include <QDate>
+#include "Module.h"
 
 
 class DbManager : public QObject
@@ -24,8 +26,9 @@ public:
 
 public slots:
     void openDatabaseConnection();
-    void displayDatabaseInTable(QTableView *tableView);
-
+    void displayDatabaseInTable(QTableView* tableView, QSqlDatabase &database);         // Which table???
+    void insertModule(const Module& module,QSqlDatabase &database);
+    void initializeDatabase(QSqlDatabase &database);
 private:
     static QSqlDatabase database;
     QTableView *MainTable;

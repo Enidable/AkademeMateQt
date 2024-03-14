@@ -16,10 +16,10 @@
   <widget class="QWidget" name="centralwidget" native="true">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>50</y>
+     <x>20</x>
+     <y>30</y>
      <width>491</width>
-     <height>481</height>
+     <height>521</height>
     </rect>
    </property>
    <widget class="QLineEdit" name="short_name_label">

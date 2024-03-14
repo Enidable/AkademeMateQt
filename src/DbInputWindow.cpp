@@ -1,11 +1,8 @@
 #include "DbInputWindow.h"
 #include "./ui_DbInputWindow.h"
-#include <QMessageBox>
-#include <QSqlQuery>
-
 
 DbInputWindow::DbInputWindow(QWidget *parent) :
-    QDialog(parent), ui(new Ui::DbInputWindow), dbManager()
+    QDialog(parent), ui(new Ui::DbInputWindow), dbManager(new DbManager(this))      // Instance of DbManager might be cause of input failure
 {
     ui->setupUi(this);
     connect(ui->submitbutton, &QPushButton::clicked, this, &DbInputWindow::onSubmitButtonClicked);
@@ -17,70 +14,76 @@ DbInputWindow::DbInputWindow(QWidget *parent) :
     xass = 0;
 
     // Open the database connection
-    dbManager.openDatabaseConnection();
+    dbManager->openDatabaseConnection();
 }
 
 DbInputWindow::~DbInputWindow()
 {
     delete ui;
+    delete dbManager;
 }
 
 void DbInputWindow::onSubmitButtonClicked()
 {
     // Get input values from the fields
-    QString short_name = ui->short_name_label->text();
     QString long_name = ui->Long_Name->text();
+    qDebug() << "Long name:" << long_name;    
+
+      if (long_name.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Name cannot be empty.");
+        return;
+    }  
+   
+    QString short_name = ui->short_name_label->text();
+    qDebug() << "Short name:" << short_name;
+
     int semester = ui->Semester_select->currentIndex() + 1; // +1 because the first item is "-"
-    QString m_k_a = ui->M_K_A_select->currentText();
+    qDebug() << "Semester:" << semester;
+
     QDate start_date = ui->Start_dateEdit->date();
+    qDebug() << "Start date:" << start_date;
+
     QDate end_date = ui->End_dateEdit->date();
-    int time_min = ui->Time_Input->text().toInt();
+    qDebug() << "End date:" << end_date;
+
+        int time_min = ui->Time_Input->text().toInt();
+    qDebug() << "Time (min):" << time_min;
+    
     double note = ui->Note_Box->currentText().toDouble();
-    int ects = ui->ECTS_Box->currentText().toInt();
-    QString status = ui->status_box->currentText();
+    qDebug() << "Note:" << note;
+    
+    QString m_k_a = ui->M_K_A_select->currentText();
+    qDebug() << "M_K_A:" << m_k_a;
+
     QString m_k_a_2 = ui->M_K_A_select_2->currentText();
+    qDebug() << "M_K_A_2:" << m_k_a_2;
+
+    int ects = ui->ECTS_Box->currentText().toInt();
+    qDebug() << "ECTS:" << ects;
+
+    QString status = ui->status_box->currentText();
+    qDebug() << "Status:" << status;
 
     // Parse performance assessment values
     xsok = m_k_a == "Sofort Online Klausur" || m_k_a_2 == "Sofort Online Klausur";
+    qDebug() << "SOK:" << xsok;
+
     xtok = m_k_a == "Termin Online Klausur" || m_k_a_2 == "Termin Online Klausur";
+    qDebug() << "TOK:" << xtok;
+
     xlab = m_k_a == "Laboratory report" || m_k_a_2 == "Laboratory report";
+    qDebug() << "LAB:" << xlab;
+
     xass = (m_k_a == "Assignment") + (m_k_a_2 == "Assignment");
+    qDebug() << "ASS:" << xass;
 
-    // Check if the database connection is open
-    if (!dbManager.getDatabase().isOpen()) {
-        qDebug() << "Error: Database connection not open.";
-        return;
-    }
+    
 
-    // Create a QSqlQuery object
-    QSqlQuery query(dbManager.getDatabase());
+    // Create a Module object
+    Module module(short_name, long_name, semester, m_k_a, start_date, end_date, time_min, note, ects, xsok, xtok, xass, xlab, status);
 
-    // Prepare the SQL INSERT statement
-    QString sql = "INSERT INTO MainTable (Abbreviation, Module, Semester, Start, End, Minutes, Note, SOK, TOK, Assignment, LAB, ECTS, Status) "
-                  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    // Bind the input values to the query parameters
-    query.prepare(sql);
-    query.addBindValue(short_name);
-    query.addBindValue(long_name);
-    query.addBindValue(semester);
-    query.addBindValue(start_date);
-    query.addBindValue(end_date);
-    query.addBindValue(time_min);
-    query.addBindValue(note);
-    query.addBindValue(xsok);
-    query.addBindValue(xtok);
-    query.addBindValue(xass);
-    query.addBindValue(xlab);
-    query.addBindValue(ects);
-    query.addBindValue(status);
-
-    // Execute the query
-    if (query.exec()) {
-        qDebug() << "Module added successfully";
-    } else {
-        qDebug() << "Error adding module:" << query.lastError();
-    }
+    // Add the module to the database
+    dbManager->insertModule(module, dbManager->getDatabase());
 
     // Close input window
     close();

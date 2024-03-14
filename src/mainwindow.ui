@@ -188,19 +188,6 @@
      <string>Show Table</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="connect_db_button">
-    <property name="geometry">
-     <rect>
-      <x>1330</x>
-      <y>510</y>
-      <width>111</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Connect Data base</string>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="variable_detail_table">
     <property name="geometry">
      <rect>
