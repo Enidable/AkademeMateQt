@@ -2,7 +2,7 @@
 #include "./ui_DbInputWindow.h"
 
 DbInputWindow::DbInputWindow(QWidget *parent) :
-    QDialog(parent), ui(new Ui::DbInputWindow), dbManager(new DbManager(this))      // Instance of DbManager might be cause of input failure
+    QDialog(parent), ui(new Ui::DbInputWindow)
 {
     ui->setupUi(this);
     connect(ui->submitbutton, &QPushButton::clicked, this, &DbInputWindow::onSubmitButtonClicked);
@@ -28,13 +28,12 @@ DbInputWindow::DbInputWindow(QWidget *parent) :
     xass = 0;
 
     // Open the database connection
-    dbManager->openDatabaseConnection();
+    DbManager::getInstance()->openDatabaseConnection();
 }
 
 DbInputWindow::~DbInputWindow()
 {
     delete ui;
-    delete dbManager;
 }
 
 void DbInputWindow::onSubmitButtonClicked()
@@ -97,7 +96,7 @@ void DbInputWindow::onSubmitButtonClicked()
     Module module(short_name, long_name, semester, start_date, end_date, time_min, note, ects, xsok, xtok, xass, xlab, status);
 
     // Add the module to the database
-    dbManager->insertModule(module, dbManager->getDatabase());
+    DbManager::getInstance()->insertModule(module, DbManager::getInstance()->getDatabase());
 
     // Close input window
     close();

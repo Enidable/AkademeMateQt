@@ -3,6 +3,7 @@
 #include <QSqlError>
 #include <QCoreApplication>
 
+DbManager* DbManager::instance = nullptr;
 QSqlDatabase DbManager::database;
 
 DbManager::DbManager(QObject *parent) : QObject(parent)
@@ -27,10 +28,19 @@ DbManager::DbManager(QObject *parent) : QObject(parent)
 DbManager::~DbManager()
 {
     // Close the database connection
-    //    database.close();
+    database.close();
 }
 /* // Add the SQLite driver
 QSqlDatabase DbManager::database = QSqlDatabase::addDatabase("QSQLITE"); */
+
+
+// Get the instance of the DbManager Object
+DbManager* DbManager::getInstance()
+{
+    if (!instance)
+        instance = new DbManager();
+    return instance;
+}
 
 // Get the database object
 QSqlDatabase &DbManager::getDatabase()
