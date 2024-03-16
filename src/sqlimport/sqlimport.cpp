@@ -146,7 +146,7 @@ int main()
 
     // Create the table if it does not exist
     executeSQLCommand(db, "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
-                              " (ID INTEGER PRIMARY KEY AUTOINCREMENT, Module TEXT, Abbreviation TEXT, Semester INTEGER, Start DATE, End DATE, Minutes INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, ASS INTEGER, LAB BOOLEAN, ECTS INTEGER, Status TEXT, UNIQUE (Abbreviation));");
+                              " (ModuleID INTEGER PRIMARY KEY AUTOINCREMENT, Module TEXT, Abbreviation TEXT, Semester INTEGER, Start DATE, End DATE, Minutes INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, ASS INTEGER, LAB BOOLEAN, ECTS INTEGER, Status TEXT, UNIQUE (Abbreviation));");
 
     // Open the CSV file for reading
     std::ifstream file(CSV_FILE_NAME);

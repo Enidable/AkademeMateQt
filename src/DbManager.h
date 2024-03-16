@@ -26,9 +26,10 @@ public:
 
 public slots:
     void openDatabaseConnection();
-    void displayDatabaseInTable(QTableView* tableView, QSqlDatabase &database);         // Which table???
+    QSqlQueryModel* displayDatabaseInTable(QTableView* tableView, QSqlDatabase &database);         // Which table???
     void insertModule(const Module& module,QSqlDatabase &database);
     void initializeDatabase(QSqlDatabase &database);
+    Module selectModule(const QString &abbreviation);
 private:
     static QSqlDatabase database;
     QTableView *MainTable;

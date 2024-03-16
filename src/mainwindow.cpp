@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Open the database connection
     dbManager->openDatabaseConnection();
         // Display the database in the table view
-    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+    queryModel = dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
@@ -23,6 +23,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Add or edit module button to function
     connect(ui->AddModuleButton, &QPushButton::clicked, this, &MainWindow::addModuleclicked);
+
+    // Set the query model for the table view
+    //queryModel = new QSqlQueryModel(this);
+    //ui->MainTable->setModel(queryModel);
+    // Connect the clicked signal to the onRowClicked slot
+    connect(ui->MainTable->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::onRowClicked);
 
     lapsTable = ui->LapsTable;
     // Set individual column widths
@@ -38,7 +44,7 @@ MainWindow::~MainWindow()
     delete dbInputwindow;
 
     // Close the database connection
-    dbManager->getDatabase().close();
+    /* dbManager->getDatabase().close(); */
 }
 
 void MainWindow::updateTimerLabel(int seconds) {
@@ -82,4 +88,21 @@ void MainWindow::addModuleclicked()
     DbInputWindow inputWindow;
     inputWindow.exec();
     dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+}
+
+void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &previous)
+{
+    // Ensure that the entire row is selected
+    ui->MainTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    // Get the selected row
+    int row = current.row();
+    qDebug() << "current row" << row;
+
+    // Get the module abbreviation from the selected row
+    // Adjust the column number to match the column containing the abbreviation (column 1)
+    QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+
+    // Query the database to retrieve the selected module using the abbreviation
+    Module selectedModule = dbManager->selectModule(abbreviation);
 }

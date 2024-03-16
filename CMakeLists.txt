@@ -28,6 +28,8 @@ set(PROJECT_SOURCES
     src/DbInputWindow.cpp
     src/DbManager.h
     src/DbManager.cpp
+    src/Module.h
+    src/Module.cpp
     src/Calculations.h
     src/Calculations.cpp
 )

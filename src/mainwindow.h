@@ -35,6 +35,7 @@ private slots:
 
     // Tables
     void addModuleclicked();
+    void onRowClicked(const QModelIndex &current, const QModelIndex &previous);
 private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;
@@ -42,5 +43,6 @@ private:
     QTableView *MainTable;
     DbManager *dbManager; // Add a pointer to a DbManager instance
     DbInputWindow *dbInputwindow;
+    QSqlQueryModel *queryModel;
 };
 #endif // MAINWINDOW_H

@@ -67,8 +67,8 @@ void DbManager::initializeDatabase(QSqlDatabase &database)
     }
 
     if (!query.exec("CREATE TABLE IF NOT EXISTS Assignment_Laboratory_report ("
-                    "ModuleID INTEGER,"
                     "AssID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "ModuleID INTEGER,"
                     "AssName TEXT,"
                     "Type TEXT,"
                     "Status TEXT,"
@@ -82,8 +82,8 @@ void DbManager::initializeDatabase(QSqlDatabase &database)
     }
 
     if (!query.exec("CREATE TABLE IF NOT EXISTS Exam ("
-                    "ModuleID INTEGER,"
                     "ExamID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "ModuleID INTEGER,"
                     "ExamName TEXT,"
                     "Status TEXT,"
                     "FOREIGN KEY (ModuleID) REFERENCES Module (ModuleID))"))
@@ -159,7 +159,7 @@ void DbManager::openDatabaseConnection()
     qDebug() << "Database connection is open";
 }
 
-void DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDatabase &database)
+QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDatabase &database)
 {
     // Create a QSqlQueryModel to hold data
     QSqlQueryModel *model = new QSqlQueryModel();
@@ -197,7 +197,10 @@ void DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDatabase &data
 
     // Resize columns to contents
     tableView->resizeColumnsToContents();
+
+    return model;
 }
+
 
 void DbManager::insertModule(const Module &module, QSqlDatabase &database)
 {
@@ -214,8 +217,6 @@ void DbManager::insertModule(const Module &module, QSqlDatabase &database)
     query.addBindValue(module.getLongName());
     query.addBindValue(module.getShortName());
     query.addBindValue(module.getSemester());
-    // query.addBindValue(module.getStartDate().toString("yyyy-MM-dd"));
-    // query.addBindValue(module.getEndDate().toString("yyyy-MM-dd"));
     query.addBindValue(module.getStartDate());
     query.addBindValue(module.getEndDate());
     query.addBindValue(module.getTimeMin());
@@ -232,4 +233,39 @@ void DbManager::insertModule(const Module &module, QSqlDatabase &database)
         qDebug() << "Error: Unable to insert module into database";
         qDebug() << "Last error: " << query.lastError();
     }
+}
+
+Module DbManager::selectModule(const QString &abbreviation)
+{
+    QSqlQuery query(QString("SELECT * FROM Module WHERE Abbreviation = '%1'").arg(abbreviation), getDatabase());
+
+    if (!query.exec())
+    {
+        qDebug() << "Failed to execute query: " << query.lastError();
+        return Module();
+    }
+
+    if (!query.next())
+    {
+        qDebug() << "Failed to select module with abbreviation" << abbreviation;
+        return Module();
+    }
+
+    // Retrieve the module data from the query and create a new Module object
+    // Make sure to update the following lines with the correct column names and data types
+    QString shortName = query.value("Abbreviation").toString();
+    QString longName = query.value("Module").toString();
+    int semester = query.value("Semester").toInt();
+    QDate startDate = query.value("Start").toDate();
+    QDate endDate = query.value("End").toDate();
+    int timeMin = query.value("Minutes").toInt();
+    double note = query.value("Note").toDouble();
+    int ects = query.value("ECTS").toInt();
+    bool sok = query.value("SOK").toBool();
+    bool tok = query.value("TOK").toBool();
+    int ass = query.value("ASS").toInt();
+    bool lab = query.value("LAB").toBool();
+    QString status = query.value("Status").toString();
+
+    return Module(shortName, longName, semester, startDate, endDate, timeMin, note, ects, sok, tok, ass, lab, status);
 }

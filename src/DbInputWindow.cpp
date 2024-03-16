@@ -94,7 +94,7 @@ void DbInputWindow::onSubmitButtonClicked()
     
 
     // Create a Module object
-    Module module(short_name, long_name, semester, m_k_a, start_date, end_date, time_min, note, ects, xsok, xtok, xass, xlab, status);
+    Module module(short_name, long_name, semester, start_date, end_date, time_min, note, ects, xsok, xtok, xass, xlab, status);
 
     // Add the module to the database
     dbManager->insertModule(module, dbManager->getDatabase());
