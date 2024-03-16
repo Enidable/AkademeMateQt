@@ -13,16 +13,17 @@
 #include "Module.h"
 
 
+
 class DbManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DbManager(QObject *parent = nullptr);
-    ~DbManager();
-
     // Getter method for the database object
     static QSqlDatabase& getDatabase();
+
+    // Getter method for the DbManager instance
+    static DbManager* getInstance();
 
 public slots:
     void openDatabaseConnection();
@@ -30,8 +31,24 @@ public slots:
     void insertModule(const Module& module,QSqlDatabase &database);
     void initializeDatabase(QSqlDatabase &database);
     Module selectModule(const QString &abbreviation);
+
 private:
+    // Private constructor to prevent instantiation from outside the class
+    explicit DbManager(QObject *parent = nullptr);
+
+    // Private destructor to prevent destruction from outside the class
+    ~DbManager();
+
+    // Private copy constructor and copy assignment operator to prevent copying
+    DbManager(const DbManager&) = delete;
+    DbManager& operator=(const DbManager&) = delete;
+
+    // Private static variable to hold the instance of the class
+    static DbManager* instance;
+
+    // Private static variable to hold the database object
     static QSqlDatabase database;
+
     QTableView *MainTable;
 };
 

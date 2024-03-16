@@ -2,14 +2,14 @@
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this)), dbManager(new DbManager(this)), dbInputwindow(new DbInputWindow(this))
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this)), dbInputwindow(new DbInputWindow(this))
 {
     ui->setupUi(this);
 
     // Open the database connection
-    dbManager->openDatabaseConnection();
+    DbManager::getInstance()->openDatabaseConnection();
         // Display the database in the table view
-    queryModel = dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+    queryModel = DbManager::getInstance()->displayDatabaseInTable(ui->MainTable, DbManager::getInstance()->getDatabase());
 
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
@@ -40,11 +40,10 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete studyTimer;
-    delete dbManager; 
     delete dbInputwindow;
 
     // Close the database connection
-    /* dbManager->getDatabase().close(); */
+    DbManager::getInstance()->getDatabase().close();
 }
 
 void MainWindow::updateTimerLabel(int seconds) {
@@ -87,7 +86,7 @@ void MainWindow::addModuleclicked()
 {
     DbInputWindow inputWindow;
     inputWindow.exec();
-    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+    DbManager::getInstance()->displayDatabaseInTable(ui->MainTable, DbManager::getInstance()->getDatabase());
 }
 
 void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &previous)
@@ -104,5 +103,5 @@ void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &pre
     QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
 
     // Query the database to retrieve the selected module using the abbreviation
-    Module selectedModule = dbManager->selectModule(abbreviation);
+    Module selectedModule = DbManager::getInstance()->selectModule(abbreviation);
 }
