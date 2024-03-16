@@ -7,6 +7,20 @@ DbInputWindow::DbInputWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->submitbutton, &QPushButton::clicked, this, &DbInputWindow::onSubmitButtonClicked);
 
+    // Set default values for start_date and end_date
+    QDate currentDate = QDate::currentDate();
+    // ui->Start_dateEdit->setDate(currentDate);
+    // ui->End_dateEdit->setDate(currentDate.addDays(42));
+
+    // Set calendarPopup attribute to true and set an empty QDate as default value
+    ui->Start_dateEdit->setCalendarPopup(true);
+    ui->Start_dateEdit->setDate(QDate(currentDate));
+    ui->Start_dateEdit->setDisplayFormat("dd.MM.yyyy ' '"); // Set custom format for date
+
+    ui->End_dateEdit->setCalendarPopup(true);
+    ui->End_dateEdit->setDate(currentDate.addDays(42));
+    ui->End_dateEdit->setDisplayFormat("dd.MM.yyyy ' '"); // Set custom format for date
+
     // Initialize private member variables
     xsok = false;
     xtok = false;

@@ -26,14 +26,14 @@ DbManager::DbManager(QObject *parent) : QObject(parent)
 
 DbManager::~DbManager()
 {
-// Close the database connection
-//    database.close();
+    // Close the database connection
+    //    database.close();
 }
 /* // Add the SQLite driver
 QSqlDatabase DbManager::database = QSqlDatabase::addDatabase("QSQLITE"); */
 
 // Get the database object
-QSqlDatabase& DbManager::getDatabase()
+QSqlDatabase &DbManager::getDatabase()
 {
     return database;
 }
@@ -42,76 +42,91 @@ void DbManager::initializeDatabase(QSqlDatabase &database)
 {
     // Create tables / data structure
     QSqlQuery query(database);
-     if (!query.exec("CREATE TABLE IF NOT EXISTS Module ("
-                   "ModuleID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                   "abbreviation TEXT KEY,"
-                   "fullName TEXT,"
-                   "semester INTEGER,"
-                   "startDate DATE,"
-                   "endDate DATE,"
-                   "minutes INTEGER,"
-                   "note TEXT,"
-                   "ECTS INTEGER,"
-                   "SOK BOOLEAN,"
-                   "TOK BOOLEAN,"
-                   "ASS INTEGER,"
-                   "LAB BOOLEAN,"
-                   "Status TEXT,"
-                   "UNIQUE (abbreviation))")) {
+    if (!query.exec("CREATE TABLE IF NOT EXISTS Module ("
+                    "ModuleID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "Module TEXT,"
+                    "Abbreviation TEXT KEY,"
+                    "Semester INTEGER,"
+                    "Start DATE,"
+                    "End DATE,"
+                    "Minutes INTEGER,"
+                    "Note TEXT,"
+                    "SOK BOOLEAN,"
+                    "TOK BOOLEAN,"
+                    "ASS INTEGER,"
+                    "LAB BOOLEAN,"
+                    "ECTS INTEGER,"
+                    "Status TEXT,"
+                    "UNIQUE (Abbreviation))"))
+    {
         qDebug() << "Failed to create Module table: " << query.lastError();
-    } else {
+    }
+    else
+    {
         qDebug() << "Module table created or already exists.";
     }
 
     if (!query.exec("CREATE TABLE IF NOT EXISTS Assignment_Laboratory_report ("
-                   "ModuleID INTEGER,"
-                   "AssID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                   "AssName TEXT,"
-                   "Type TEXT,"
-                   "Status TEXT,"
-                   "FOREIGN KEY (ModuleID) REFERENCES Module (ModuleID))")) {
+                    "ModuleID INTEGER,"
+                    "AssID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "AssName TEXT,"
+                    "Type TEXT,"
+                    "Status TEXT,"
+                    "FOREIGN KEY (ModuleID) REFERENCES Module (ModuleID))"))
+    {
         qDebug() << "Failed to create Assignment_Laboratory_report table: " << query.lastError();
-    } else {
+    }
+    else
+    {
         qDebug() << "Assignment_Laboratory_report table created or already exists.";
     }
 
     if (!query.exec("CREATE TABLE IF NOT EXISTS Exam ("
-                   "ModuleID INTEGER,"
-                   "ExamID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                   "ExamName TEXT,"
-                   "Status TEXT,"
-                   "FOREIGN KEY (ModuleID) REFERENCES Module (ModuleID))")) {
+                    "ModuleID INTEGER,"
+                    "ExamID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "ExamName TEXT,"
+                    "Status TEXT,"
+                    "FOREIGN KEY (ModuleID) REFERENCES Module (ModuleID))"))
+    {
         qDebug() << "Failed to create Exam table: " << query.lastError();
-    } else {
+    }
+    else
+    {
         qDebug() << "Exam table created or already exists.";
     }
 
     if (!query.exec("CREATE TABLE IF NOT EXISTS Time_ASS ("
-                   "AssID INTEGER,"
-                   "timeType TEXT,"
-                   "research INTEGER,"
-                   "application INTEGER,"
-                   "writeAndCreate INTEGER,"
-                   "proofreading INTEGER,"
-                   "timeAss INTEGER,"
-                   "FOREIGN KEY (AssID) REFERENCES Assignment_Laboratory_report (AssID))")) {
+                    "AssID INTEGER,"
+                    "timeType TEXT,"
+                    "research INTEGER,"
+                    "application INTEGER,"
+                    "writeAndCreate INTEGER,"
+                    "proofreading INTEGER,"
+                    "timeAss INTEGER,"
+                    "FOREIGN KEY (AssID) REFERENCES Assignment_Laboratory_report (AssID))"))
+    {
         qDebug() << "Failed to create Time_ASS table: " << query.lastError();
-    } else {
+    }
+    else
+    {
         qDebug() << "Time_ASS table created or already exists.";
     }
 
     if (!query.exec("CREATE TABLE IF NOT EXISTS Time_Exam ("
-                   "ExamID INTEGER,"
-                   "timeType TEXT,"
-                   "studying INTEGER,"
-                   "studyLetters INTEGER,"
-                   "practice INTEGER,"
-                   "StudyingForExam INTEGER,"
-                   "exam INTEGER,"
-                   "timeExam INTEGER,"
-                   "FOREIGN KEY (ExamID) REFERENCES Exam (ExamID))")) {
+                    "ExamID INTEGER,"
+                    "timeType TEXT,"
+                    "studying INTEGER,"
+                    "studyLetters INTEGER,"
+                    "practice INTEGER,"
+                    "StudyingForExam INTEGER,"
+                    "exam INTEGER,"
+                    "timeExam INTEGER,"
+                    "FOREIGN KEY (ExamID) REFERENCES Exam (ExamID))"))
+    {
         qDebug() << "Failed to create Time_Exam table: " << query.lastError();
-    } else {
+    }
+    else
+    {
         qDebug() << "Time_Exam table created or already exists.";
     }
 }
@@ -119,20 +134,23 @@ void DbManager::initializeDatabase(QSqlDatabase &database)
 void DbManager::openDatabaseConnection()
 {
     // Check if the database connection is already open
-    if (database.isOpen()) {
-        qDebug()<< "Database is already open.";
+    if (database.isOpen())
+    {
+        qDebug() << "Database is already open.";
         return;
     }
-    
+
     // Add the SQLite driver if not already added
-    if (!QSqlDatabase::contains()) {
+    if (!QSqlDatabase::contains())
+    {
         QSqlDatabase::addDatabase("QSQLITE");
     }
     // Set the database name
     // executable will be in /build, so use a relative path from there to find find db in directory data
     database.setDatabaseName("../data/Module.db");
     // Open the database
-    if (!database.open()) {
+    if (!database.open())
+    {
         qDebug() << "Error: Unable to open database connection";
         qDebug() << "Database error:" << database.lastError().text(); // Log the error
         return;
@@ -141,12 +159,31 @@ void DbManager::openDatabaseConnection()
     qDebug() << "Database connection is open";
 }
 
-void DbManager::displayDatabaseInTable(QTableView* tableView, QSqlDatabase &database)
+void DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDatabase &database)
 {
     // Create a QSqlQueryModel to hold data
     QSqlQueryModel *model = new QSqlQueryModel();
 
-    QString queryStr = "SELECT * FROM \"Module\"";      // Make table variable!!! So function can be used for variaty of tables
+    // QString queryStr = "SELECT * FROM \"Module\""; // Make table variable!!! So function can be used for variaty of tables
+    QString queryStr = QStringLiteral(R"(
+    SELECT
+        Module,
+        Abbreviation,
+        Semester,
+        strftime('%d/%m/%Y', Start) AS Start,
+        strftime('%d/%m/%Y', End) AS End,
+        Minutes,
+        CAST(Minutes / 60.0 AS REAL) AS Hours,
+        Note,
+        CASE WHEN SOK THEN '●' ELSE '' END AS SOK,
+        CASE WHEN TOK THEN '●' ELSE '' END AS TOK,
+        ASS,
+        CASE WHEN LAB THEN '●' ELSE '' END AS LAB,
+        ECTS,
+        Status
+    FROM
+        Module;
+)");
 
     // Set the query to the model using the provided database connection
     model->setQuery(queryStr, database);
@@ -162,21 +199,25 @@ void DbManager::displayDatabaseInTable(QTableView* tableView, QSqlDatabase &data
     tableView->resizeColumnsToContents();
 }
 
-void DbManager::insertModule(const Module& module, QSqlDatabase &database){
+void DbManager::insertModule(const Module &module, QSqlDatabase &database)
+{
     QSqlQuery query(database); // Pass the database object to the QSqlQuery constructor
 
-    if (!database.isOpen()) {
+    if (!database.isOpen())
+    {
         qDebug() << "Error: Database not open";
         return;
     }
 
-    query.prepare("INSERT INTO Module (fullName, abbreviation, semester, startDate, endDate, minutes, note, SOK, TOK, ASS, LAB, ECTS, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO Module (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, ASS, LAB, ECTS, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     // Bind the values to the query
     query.addBindValue(module.getLongName());
     query.addBindValue(module.getShortName());
     query.addBindValue(module.getSemester());
-    query.addBindValue(module.getStartDate().toString("yyyy-MM-dd"));
-    query.addBindValue(module.getEndDate().toString("yyyy-MM-dd"));
+    // query.addBindValue(module.getStartDate().toString("yyyy-MM-dd"));
+    // query.addBindValue(module.getEndDate().toString("yyyy-MM-dd"));
+    query.addBindValue(module.getStartDate());
+    query.addBindValue(module.getEndDate());
     query.addBindValue(module.getTimeMin());
     query.addBindValue(module.getNote());
     query.addBindValue(module.getSok());
@@ -186,7 +227,8 @@ void DbManager::insertModule(const Module& module, QSqlDatabase &database){
     query.addBindValue(module.getEcts());
     query.addBindValue(module.getStatus());
 
-    if (!query.exec()) {
+    if (!query.exec())
+    {
         qDebug() << "Error: Unable to insert module into database";
         qDebug() << "Last error: " << query.lastError();
     }

@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Open the database connection
     dbManager->openDatabaseConnection();
+    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
@@ -82,4 +83,5 @@ void MainWindow::addModuleclicked()
 {
     DbInputWindow inputWindow;
     inputWindow.exec();
+    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 }
