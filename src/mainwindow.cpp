@@ -21,8 +21,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(studyTimer, &StudyTimer::timerUpdated, this, &MainWindow::updateTimerLabel);
     connect(studyTimer, &StudyTimer::lapsUpdated, this, &MainWindow::updateLapsTable);
 
-    // Add or edit module button to function
+    // Buttons for adding/editing/deleting modules
     connect(ui->AddModuleButton, &QPushButton::clicked, this, &MainWindow::addModuleclicked);
+    connect(ui->EditModuleButton, &QPushButton::clicked, this, &MainWindow::editModuleclicked);
+    connect(ui->DeleteModuleButton, &QPushButton::clicked, this, &MainWindow::deleteModuleclicked);
 
     // Set the query model for the table view
     //queryModel = new QSqlQueryModel(this);
@@ -89,6 +91,44 @@ void MainWindow::addModuleclicked()
     inputWindow.exec();
     dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 }
+
+void MainWindow::editModuleclicked()
+{
+    // Get the selected row
+    int row = ui->MainTable->currentIndex().row();
+/*
+    // Get the module abbreviation from the selected row
+    QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+
+    // Query the database to retrieve the selected module
+    Module selectedModule = dbManager->selectModule(abbreviation);
+
+    // Display the selected module in the DbInputWindow and allow editing
+    DbInputWindow inputWindow(this, true, selectedModule);
+    inputWindow.exec();
+
+    // Refresh the table view
+    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+*/
+}
+
+void MainWindow::deleteModuleclicked()
+{
+    // Get the selected row
+    int row = ui->MainTable->currentIndex().row();
+/*
+    // Get the module abbreviation from the selected row
+    QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+
+    // Delete the selected module from the database
+    if (dbManager->deleteModule(abbreviation, dbManager->getDatabase()))
+    {
+        // Refresh the table view
+        dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+    }
+*/
+}
+
 
 void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &previous)
 {

@@ -35,6 +35,8 @@ private slots:
 
     // Tables
     void addModuleclicked();
+    void editModuleclicked();
+    void deleteModuleclicked();
     void onRowClicked(const QModelIndex &current, const QModelIndex &previous);
 private:
     Ui::MainWindow *ui;
