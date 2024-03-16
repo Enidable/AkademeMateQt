@@ -166,7 +166,7 @@ QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDat
 
     // Set the bullet point character
     // possible characters: ✓ ✔ ● ☑ ✗ ☒ ✖ ◇ ◆  ◉ ◈
-    const QString bulletPoint = "◆";    // make this configurable
+    const QString bulletPoint = "✖";    // make this configurable
 
     // QString queryStr = "SELECT * FROM \"Module\""; // Make table variable!!! So function can be used for variaty of tables
     QString queryStr = QStringLiteral(R"(
@@ -285,4 +285,75 @@ Module DbManager::selectModule(const QString &abbreviation)
     QString status = query.value("Status").toString();
 
     return Module(shortName, longName, semester, startDate, endDate, timeMin, note, ects, sok, tok, ass, lab, status);
+}
+
+bool DbManager::deleteModule(const QString &abbreviation, QSqlDatabase &database)
+{
+    if (!database.isOpen())
+    {
+        qDebug() << "Error: Database not open";
+        return false;
+    }
+
+    QSqlQuery query(database);
+    query.prepare("DELETE FROM Module WHERE Abbreviation = ?");
+    query.addBindValue(abbreviation);
+
+    if (!query.exec())
+    {
+        qDebug() << "Error: Unable to delete module from database";
+        qDebug() << "Last error: " << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+bool DbManager::updateModule(const Module &module, QSqlDatabase &database)
+{
+    if (!database.isOpen())
+    {
+        qDebug() << "Error: Database not open";
+        return false;
+    }
+
+    QSqlQuery query(database);
+    query.prepare("UPDATE Module SET "
+                  "Module = ?, "
+                  "Semester = ?, "
+                  "Start = ?, "
+                  "End = ?, "
+                  "Minutes = ?, "
+                  "Note = ?, "
+                  "SOK = ?, "
+                  "TOK = ?, "
+                  "ASS = ?, "
+                  "LAB = ?, "
+                  "ECTS = ?, "
+                  "Status = ? "
+                  "WHERE Abbreviation = ?");
+
+    // Bind the values to the query
+    query.addBindValue(module.getLongName());
+    query.addBindValue(module.getSemester());
+    query.addBindValue(module.getStartDate());
+    query.addBindValue(module.getEndDate());
+    query.addBindValue(module.getTimeMin());
+    query.addBindValue(module.getNote());
+    query.addBindValue(module.getSok());
+    query.addBindValue(module.getTok());
+    query.addBindValue(module.getAss());
+    query.addBindValue(module.getLab());
+    query.addBindValue(module.getEcts());
+    query.addBindValue(module.getStatus());
+    query.addBindValue(module.getShortName());
+
+    if (!query.exec())
+    {
+        qDebug() << "Error: Unable to update module in database";
+        qDebug() << "Last error: " << query.lastError();
+        return false;
+    }
+
+    return true;
 }
