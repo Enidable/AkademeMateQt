@@ -164,6 +164,10 @@ QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDat
     // Create a QSqlQueryModel to hold data
     QSqlQueryModel *model = new QSqlQueryModel();
 
+    // Set the bullet point character
+    // possible characters: ✓ ✔ ● ☑ ✗ ☒ ✖ ◇ ◆  ◉ ◈
+    const QString bulletPoint = "◆";    // make this configurable
+
     // QString queryStr = "SELECT * FROM \"Module\""; // Make table variable!!! So function can be used for variaty of tables
     QString queryStr = QStringLiteral(R"(
     SELECT
@@ -175,18 +179,31 @@ QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDat
         Minutes,
         CAST(Minutes / 60.0 AS REAL) AS Hours,
         Note,
-        CASE WHEN SOK THEN '●' ELSE '' END AS SOK,
-        CASE WHEN TOK THEN '●' ELSE '' END AS TOK,
-        ASS,
-        CASE WHEN LAB THEN '●' ELSE '' END AS LAB,
+        CASE WHEN SOK THEN ? ELSE '' END AS SOK,
+        CASE WHEN TOK THEN ? ELSE '' END AS TOK,
+        replace(hex(zeroblob(ASS)), '00', ?) AS ASS,  -- Solution from https://stackoverflow.com/questions/11568496/how-to-emulate-repeat-in-sqlite
+        CASE WHEN LAB THEN ? ELSE '' END AS LAB,
         ECTS,
         Status
     FROM
         Module;
 )");
 
-    // Set the query to the model using the provided database connection
-    model->setQuery(queryStr, database);
+    // Create a QSqlQuery and set the query string
+    QSqlQuery query(database);
+    query.prepare(queryStr);
+
+    // Bind the bullet point character to the parameters in the query
+    query.bindValue(0, bulletPoint);
+    query.bindValue(1, bulletPoint);
+    query.bindValue(2, bulletPoint);
+    query.bindValue(3, bulletPoint);
+
+    // Execute the query
+    query.exec();
+
+    // Set the query to the model
+    model->setQuery(query);
 
     // Debug Statements
     qDebug() << "Number of rows:" << model->rowCount();
