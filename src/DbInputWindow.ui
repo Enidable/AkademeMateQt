@@ -310,6 +310,9 @@
       <height>25</height>
      </rect>
     </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QDateEdit" name="End_dateEdit">
     <property name="geometry">
@@ -319,6 +322,9 @@
       <width>110</width>
       <height>25</height>
      </rect>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLineEdit" name="Time_Input">

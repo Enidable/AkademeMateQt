@@ -74,6 +74,39 @@ void executeSQLCommand(sqlite3 *db, const std::string &sql)
         sqlite3_free(errMsg);
     }
 }
+/**
+ * @brief Converts a date string from the format "dd/mm/yyyy" to the format "yyyy-mm-dd".
+ *
+ * @param date The date string in the format "dd/mm/yyyy".
+ * @return std::string The converted date string in the format "yyyy-mm-dd".
+ *
+ * This function takes a date string as input and converts it to the desired format. If the
+ * input date string is not in the expected format, an error message is printed to stderr,
+ * and an empty string is returned.
+ */
+std::string convertDateFormat(const std::string &date)
+{
+    std::istringstream iss(date);
+    int d, m, y;
+    char delimiter;
+    std::string newFormat;
+
+    if (iss >> d >> delimiter >> m >> delimiter >> y)
+    {
+        std::ostringstream oss;
+        oss << std::setfill('0') << std::setw(4) << y << "-"
+            << std::setfill('0') << std::setw(2) << m << "-"
+            << std::setfill('0') << std::setw(2) << d;
+        newFormat = oss.str();
+    }
+    else
+    {
+        std::cerr << "Invalid date format: " << date << std::endl;
+    }
+
+    return newFormat;
+}
+
 
 /**
  * @brief Inserts study module data into the SQLite database.
@@ -82,16 +115,20 @@ void executeSQLCommand(sqlite3 *db, const std::string &sql)
  */
 void insertData(sqlite3 *db, const StudiumData &data)
 {
+    std::string startISO = convertDateFormat(data.Start);
+    std::string endISO = convertDateFormat(data.End);
+
     std::stringstream ss;
-    ss << "INSERT INTO " << TABLE_NAME << " (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, Assignment, LAB, ECTS, Status) VALUES ('" << data.Module << "', '"
+    ss << "INSERT INTO " << TABLE_NAME << " (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, ASS, LAB, ECTS, Status) VALUES ('" << data.Module << "', '"
        << data.Abbrev << "', " << data.Semester << ", '"
-       << data.Start << "', '" << data.End << "', "
+       << startISO << "', '" << endISO << "', "
        << data.Minutes << ", '" << data.Note << "', "
        << data.SOK << ", " << data.TOK << ", " << data.Assignment << ", " << data.LAB << ", "
        << data.ECTS << ", '" << data.Status << "');";
 
     executeSQLCommand(db, ss.str());
 }
+
 
 /**
  * @brief Main function to read data from CSV and import into the SQLite database.
@@ -109,7 +146,7 @@ int main()
 
     // Create the table if it does not exist
     executeSQLCommand(db, "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
-                              " (ID INTEGER PRIMARY KEY AUTOINCREMENT, Module TEXT, Abbreviation TEXT, Semester INTEGER, Start DATE, End DATE, Minutes INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, Assignment INTEGER, LAB BOOLEAN, ECTS INTEGER, Status TEXT);");
+                              " (ID INTEGER PRIMARY KEY AUTOINCREMENT, Module TEXT, Abbreviation TEXT, Semester INTEGER, Start DATE, End DATE, Minutes INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, ASS INTEGER, LAB BOOLEAN, ECTS INTEGER, Status TEXT, UNIQUE (Abbreviation));");
 
     // Open the CSV file for reading
     std::ifstream file(CSV_FILE_NAME);
@@ -211,19 +248,28 @@ int main()
 
         // Read ECTS as string
         std::string ectsStr;
-        ss >> ectsStr;
+        std::getline(ss, ectsStr, ',');
+        // ss >> ectsStr;
 
         // Convert ECTS to integer or set to 0 if empty or invalid
-        try {
-            if (!ectsStr.empty()) {
+        try
+        {
+            if (!ectsStr.empty())
+            {
                 data.ECTS = std::stoi(ectsStr);
-            } else {
+            }
+            else
+            {
                 data.ECTS = 0;
             }
-        } catch (const std::invalid_argument& e) {
+        }
+        catch (const std::invalid_argument &e)
+        {
             std::cerr << "Invalid ECTS value: " << ectsStr << ". Setting ECTS to 0." << std::endl;
             data.ECTS = 0;
-        } catch (const std::out_of_range& e) {
+        }
+        catch (const std::out_of_range &e)
+        {
             std::cerr << "ECTS value out of range: " << ectsStr << ". Setting ECTS to 0." << std::endl;
             data.ECTS = 0;
         }

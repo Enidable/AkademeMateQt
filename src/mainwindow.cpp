@@ -81,4 +81,5 @@ void MainWindow::addModuleclicked()
 {
     DbInputWindow inputWindow;
     inputWindow.exec();
+    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 }
