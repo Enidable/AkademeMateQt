@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Open the database connection
     dbManager->openDatabaseConnection();
+        // Display the database in the table view
+    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
@@ -18,9 +20,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Connect StudyTimer signals to MainWindow slots
     connect(studyTimer, &StudyTimer::timerUpdated, this, &MainWindow::updateTimerLabel);
     connect(studyTimer, &StudyTimer::lapsUpdated, this, &MainWindow::updateLapsTable);
-
-    // Connect Load Database button to function (remove the connection to openDatabaseConnection())
-    connect(ui->Load_db_button, &QPushButton::clicked, [&](){ dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase()); }); // Use the arrow operator to call the function on the DbManager pointer
 
     // Add or edit module button to function
     connect(ui->AddModuleButton, &QPushButton::clicked, this, &MainWindow::addModuleclicked);
