@@ -74,7 +74,8 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "qsqlerror": "cpp"
+        "qsqlerror": "cpp",
+        "unordered_set": "cpp"
     },
     "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe"
 }
