@@ -279,7 +279,6 @@ Module DbManager::selectModule(const QString &abbreviation)
     }
 
     // Retrieve the module data from the query and create a new Module object
-    // Make sure to update the following lines with the correct column names and data types
     QString shortName = query.value("Abbreviation").toString();
     QString longName = query.value("Module").toString();
     int semester = query.value("Semester").toInt();

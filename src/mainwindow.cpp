@@ -5,11 +5,13 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this)), dbInputwindow(new DbInputWindow(this))
 {
     ui->setupUi(this);
+    // Initialize the DbManager instance
+    dbManager = DbManager::getInstance();
 
     // Open the database connection
-    DbManager::getInstance()->openDatabaseConnection();
+    dbManager->openDatabaseConnection();
         // Display the database in the table view
-    queryModel = DbManager::getInstance()->displayDatabaseInTable(ui->MainTable, DbManager::getInstance()->getDatabase());
+    queryModel = dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
@@ -30,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //queryModel = new QSqlQueryModel(this);
     //ui->MainTable->setModel(queryModel);
     // Connect the clicked signal to the onRowClicked slot
-    connect(ui->MainTable->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::onRowClicked);
+    connect(ui->MainTable->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::onRowClicked);
 
     lapsTable = ui->LapsTable;
     // Set individual column widths
@@ -45,7 +47,7 @@ MainWindow::~MainWindow()
     delete dbInputwindow;
 
     // Close the database connection
-    DbManager::getInstance()->getDatabase().close();
+    dbManager->getDatabase().close();
 }
 
 void MainWindow::updateTimerLabel(int seconds) {
@@ -88,7 +90,7 @@ void MainWindow::addModuleclicked()
 {
     DbInputWindow inputWindow;
     inputWindow.exec();
-    DbManager::getInstance()->displayDatabaseInTable(ui->MainTable, DbManager::getInstance()->getDatabase());
+    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 }
 
 void MainWindow::editModuleclicked()
@@ -115,19 +117,28 @@ void MainWindow::deleteModuleclicked()
 {
     // Get the selected row
     int row = ui->MainTable->currentIndex().row();
-/*
-    // Get the module abbreviation from the selected row
-    QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
 
-    // Delete the selected module from the database
-    if (dbManager->deleteModule(abbreviation, dbManager->getDatabase()))
+    if (row != -1) // Ensure a valid row is selected
     {
-        // Refresh the table view
-        dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
-    }
-*/
-}
+        // Get the module abbreviation from the selected row
+        QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
 
+        // Delete the selected module from the database
+        if (dbManager->deleteModule(abbreviation, dbManager->getDatabase()))
+        {
+            // Refresh the table view
+            dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+        }
+        else
+        {
+            QMessageBox::warning(this, "Error", "Failed to delete module from database.");
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this, "Error", "No module selected.");
+    }
+}
 
 void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &previous)
 {
@@ -143,5 +154,5 @@ void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &pre
     QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
 
     // Query the database to retrieve the selected module using the abbreviation
-    Module selectedModule = DbManager::getInstance()->selectModule(abbreviation);
+    Module selectedModule = dbManager->selectModule(abbreviation);
 }
