@@ -17,15 +17,16 @@
 const std::string CSV_FILE_NAME = "modules-export-new.csv";
 const std::string DATABASE_FILE_NAME = "Module.db";
 const std::string TABLE_NAME = "Module";
+const std::string CREATE_TABLES_SQL_FILE = "CreateTables.sql"; // File containing SQL statements for table creation
 
 // Constant for skipping empty lines
 const bool SKIP_EMPTY_LINES = true;
 
 /**
- * @struct StudiumData
+ * @struct ModuleData
  * @brief Structure to hold data for a study module.
  */
-struct StudiumData
+struct ModuleData
 {
     std::string Module;
     std::string Abbrev;
@@ -44,6 +45,9 @@ struct StudiumData
 
 /**
  * @brief Callback function for SQLite queries.
+ *
+ * This function is required by SQLite to process the results of an SQL query. 
+ * It must have the following signature to function correctly:
  * @param notUsed Unused parameter.
  * @param argc Number of columns in the result set.
  * @param argv Array of strings representing column values.
@@ -74,6 +78,31 @@ void executeSQLCommand(sqlite3 *db, const std::string &sql)
         sqlite3_free(errMsg);
     }
 }
+
+/**
+ * @brief Reads SQL statements from a file and executes them on the SQLite database.
+ * @param db SQLite database connection.
+ * @param fileName Name of the file containing SQL statements.
+ */
+void executeSQLFromFile(sqlite3 *db, const std::string &fileName)
+{
+    std::ifstream file(fileName);
+    if (!file.is_open())
+    {
+        std::cerr << "Error opening SQL file: " << fileName << std::endl;
+        return;
+    }
+
+    std::string sqlStatement;
+    std::stringstream ss;
+    while (std::getline(file, sqlStatement))
+    {
+        ss << sqlStatement;
+    }
+
+    executeSQLCommand(db, ss.str());
+}
+
 /**
  * @brief Converts a date string from the format "dd/mm/yyyy" to the format "yyyy-mm-dd".
  *
@@ -113,19 +142,22 @@ std::string convertDateFormat(const std::string &date)
  * @param db SQLite database connection.
  * @param data Study module data to insert.
  */
-void insertData(sqlite3 *db, const StudiumData &data)
+void insertData(sqlite3 *db, const ModuleData &data)
 {
     std::string startISO = convertDateFormat(data.Start);
     std::string endISO = convertDateFormat(data.End);
 
     std::stringstream ss;
-    ss << "INSERT INTO " << TABLE_NAME << " (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, ASS, LAB, ECTS, Status) VALUES ('" << data.Module << "', '"
+    ss << "INSERT INTO " << TABLE_NAME << " (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, ASS, LAB, ECTS, StatusID) VALUES ('"
+       << data.Module << "', '"
        << data.Abbrev << "', " << data.Semester << ", '"
        << startISO << "', '" << endISO << "', "
        << data.Minutes << ", '" << data.Note << "', "
        << data.SOK << ", " << data.TOK << ", " << data.Assignment << ", " << data.LAB << ", "
-       << data.ECTS << ", '" << data.Status << "');";
+       << data.ECTS << ", "
+       << "(SELECT StatusID FROM Status WHERE Status COLLATE NOCASE = '" << data.Status << "'));";
 
+    std::cout << ss.str() << std::endl;
     executeSQLCommand(db, ss.str());
 }
 
@@ -144,9 +176,8 @@ int main()
         return rc;
     }
 
-    // Create the table if it does not exist
-    executeSQLCommand(db, "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
-                              " (ModuleID INTEGER PRIMARY KEY AUTOINCREMENT, Module TEXT, Abbreviation TEXT, Semester INTEGER, Start DATE, End DATE, Minutes INTEGER, Note TEXT, SOK BOOLEAN, TOK BOOLEAN, ASS INTEGER, LAB BOOLEAN, ECTS INTEGER, Status TEXT, UNIQUE (Abbreviation));");
+    // Execute SQL statements from the external file
+    executeSQLFromFile(db, CREATE_TABLES_SQL_FILE);
 
     // Open the CSV file for reading
     std::ifstream file(CSV_FILE_NAME);
@@ -169,7 +200,7 @@ int main()
 
         // Parse data from the CSV line
         std::istringstream ss(line);
-        StudiumData data;
+        ModuleData data;
 
         // Debug: Output the entire CSV line
         std::cout << "CSV Line: " << line << std::endl;

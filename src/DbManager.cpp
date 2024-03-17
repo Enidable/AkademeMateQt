@@ -194,7 +194,7 @@ QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDat
         replace(hex(zeroblob(ASS)), '00', ?) AS ASS,  -- Solution from https://stackoverflow.com/questions/11568496/how-to-emulate-repeat-in-sqlite
         CASE WHEN LAB THEN ? ELSE '' END AS LAB,
         ECTS,
-        Status
+        (SELECT Status FROM Status WHERE StatusID = Module.StatusID) AS Status
     FROM
         Module;
 )");
