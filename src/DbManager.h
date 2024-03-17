@@ -24,15 +24,20 @@ public:
 
     // Getter method for the DbManager instance
     static DbManager* getInstance();
+    QString getDisplayQueryStr() const;
 
 public slots:
     void openDatabaseConnection();
-    QSqlQueryModel* displayDatabaseInTable(QTableView* tableView, QSqlDatabase &database);         // Which table??? 
+    QSqlQueryModel* displayDatabaseInTable(QTableView* tableView, QSqlDatabase &database);         // MainTable 
     void insertModule(const Module& module,QSqlDatabase &database);
     bool deleteModule(const QString& abbreviation, QSqlDatabase& database);
     bool updateModule(const Module& module, QSqlDatabase& database);
     void initializeDatabase(QSqlDatabase &database);
     Module selectModule(const QString &abbreviation);
+    public:
+    // Refresh the database within the application
+    //void updateQueryModel(QSqlQueryModel *queryModel);
+
 
 private:
     // Private constructor to prevent instantiation from outside the class

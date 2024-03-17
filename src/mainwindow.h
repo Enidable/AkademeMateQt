@@ -37,7 +37,9 @@ private slots:
     void addModuleclicked();
     void editModuleclicked();
     void deleteModuleclicked();
+    //void updateMainTable();
     void onRowClicked(const QModelIndex &current, const QModelIndex &previous);
+    void onRowChanged(const QModelIndex &current, const QModelIndex &previous);
 private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;
@@ -46,5 +48,6 @@ private:
     DbManager *dbManager; // Add a pointer to a DbManager instance
     DbInputWindow *dbInputwindow;
     QSqlQueryModel *queryModel;
+    int selectedRow;
 };
 #endif // MAINWINDOW_H

@@ -1,10 +1,11 @@
 #include "DbInputWindow.h"
 #include "./ui_DbInputWindow.h"
 
-DbInputWindow::DbInputWindow(QWidget *parent) :
+DbInputWindow::DbInputWindow(QWidget *parent, bool isEdit) :
     QDialog(parent), ui(new Ui::DbInputWindow)
 {
     ui->setupUi(this);
+    this->isEdit = isEdit;
     connect(ui->submitbutton, &QPushButton::clicked, this, &DbInputWindow::onSubmitButtonClicked);
 
     // Set default values for start_date and end_date
@@ -90,14 +91,39 @@ void DbInputWindow::onSubmitButtonClicked()
     xass = (m_k_a == "Assignment") + (m_k_a_2 == "Assignment");
     qDebug() << "ASS:" << xass;
 
-    
-
     // Create a Module object
     Module module(short_name, long_name, semester, start_date, end_date, time_min, note, ects, xsok, xtok, xass, xlab, status);
-
-    // Add the module to the database
-    DbManager::getInstance()->insertModule(module, DbManager::getInstance()->getDatabase());
+    
+   // Check if the input window is for editing a module
+    if (isEdit)
+    {
+        // Update the module in the database
+        DbManager::getInstance()->updateModule(module, DbManager::getInstance()->getDatabase());
+    }
+    else
+    {
+        // Add the module to the database
+        DbManager::getInstance()->insertModule(module, DbManager::getInstance()->getDatabase());
+    }
 
     // Close input window
     close();
+}
+
+void DbInputWindow::setModule(const Module &module)
+{
+    ui->Long_Name->setText(module.getLongName());
+    ui->short_name_label->setText(module.getShortName());
+    ui->Semester_select->setCurrentIndex(module.getSemester() - 1);
+    ui->Start_dateEdit->setDate(module.getStartDate());
+    ui->End_dateEdit->setDate(module.getEndDate());
+    ui->Time_Input->setText(QString::number(module.getTimeMin()));
+    QString noteString = QString::number(module.getNote(), 'f', 2);
+    ui->Note_Box->setCurrentText(noteString);
+    ui->M_K_A_select->setCurrentText(module.getSok() ? "Sofort Online Klausur" : module.getTok() ? "Termin Online Klausur" : "");
+    ui->M_K_A_select_2->setCurrentText(module.getAss() > 0 ? "Assignment" : module.getLab() ? "Laboratory report" : "");
+    ui->ECTS_Box->setCurrentText(QString::number(module.getEcts()));
+    ui->status_box->setCurrentText(module.getStatus());
+
+    isEdit = true;
 }

@@ -2,9 +2,13 @@
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this)), dbInputwindow(new DbInputWindow(this))
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this)), dbInputwindow(new DbInputWindow(this)), selectedRow(-1)
 {
     ui->setupUi(this);
+
+    // Set the selection behavior for the table view
+    ui->MainTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+
     // Initialize the DbManager instance
     dbManager = DbManager::getInstance();
 
@@ -91,43 +95,63 @@ void MainWindow::addModuleclicked()
     DbInputWindow inputWindow;
     inputWindow.exec();
     dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+
+    // Update the queryModel
+    //dbManager->updateQueryModel(queryModel);
 }
 
 void MainWindow::editModuleclicked()
 {
     // Get the selected row
-    int row = ui->MainTable->currentIndex().row();
-/*
-    // Get the module abbreviation from the selected row
-    QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+    QModelIndex currentIndex = ui->MainTable->currentIndex();
+    if (currentIndex.isValid()) // Ensure a valid row is selected
+    {
+        // Get the module abbreviation from the selected row
+        QString abbreviation = queryModel->data(queryModel->index(currentIndex.row(), 1)).toString();
 
-    // Query the database to retrieve the selected module
-    Module selectedModule = dbManager->selectModule(abbreviation);
+        // Retrieve the selected module from the database
+        Module selectedModule = dbManager->selectModule(abbreviation);
 
-    // Display the selected module in the DbInputWindow and allow editing
-    DbInputWindow inputWindow(this, true, selectedModule);
-    inputWindow.exec();
+        // Open input window for editing the module
+        DbInputWindow inputWindow(this);
+        inputWindow.setModule(selectedModule);
+        inputWindow.exec();
 
-    // Refresh the table view
-    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
-*/
+        // Update the module in the database
+        dbManager->updateModule(selectedModule, dbManager->getDatabase());
+
+        // Refresh the table view
+        dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+
+        // Update the queryModel
+        //dbManager->updateQueryModel(queryModel);
+    }
+    else
+    {
+        QMessageBox::warning(this, "Error", "No module selected.");
+    }
 }
+
 
 void MainWindow::deleteModuleclicked()
 {
     // Get the selected row
-    int row = ui->MainTable->currentIndex().row();
-
-    if (row != -1) // Ensure a valid row is selected
+    QModelIndex currentIndex = ui->MainTable->currentIndex();
+    if (currentIndex.isValid()) // Ensure a valid row is selected
     {
         // Get the module abbreviation from the selected row
-        QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+        QString abbreviation = queryModel->data(queryModel->index(currentIndex.row(), 1)).toString();
+
+        qDebug() << "Selected row for deletion:" << currentIndex.row() << "Abbreviation:" << abbreviation;
 
         // Delete the selected module from the database
         if (dbManager->deleteModule(abbreviation, dbManager->getDatabase()))
         {
             // Refresh the table view
             dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+
+            // Reset the selectedRow variable
+            selectedRow = -1;
         }
         else
         {
@@ -140,19 +164,27 @@ void MainWindow::deleteModuleclicked()
     }
 }
 
+void MainWindow::onRowChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    selectedRow = current.row();
+}
+
 void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &previous)
 {
-    // Ensure that the entire row is selected
-    ui->MainTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    if (current.isValid()) {
+        onRowChanged(current, previous);
 
-    // Get the selected row
-    int row = current.row();
-    qDebug() << "current row" << row;
+        // Get the selected row
+        int row = current.row();
+        qDebug() << "current row" << row;
 
-    // Get the module abbreviation from the selected row
-    // Adjust the column number to match the column containing the abbreviation (column 1)
-    QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+        // Get the module abbreviation from the selected row
+        // Adjust the column number to match the column containing the abbreviation (column 1)
+        QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+        // Print the abbreviation in the qDebug statement
+        qDebug() << "Module abbreviation:" << abbreviation;
 
-    // Query the database to retrieve the selected module using the abbreviation
-    Module selectedModule = dbManager->selectModule(abbreviation);
+        // Query the database to retrieve the selected module using the abbreviation
+        Module selectedModule = dbManager->selectModule(abbreviation);
+    }
 }

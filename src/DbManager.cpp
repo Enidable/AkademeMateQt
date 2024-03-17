@@ -228,6 +228,20 @@ QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDat
     return model;
 }
 
+/*
+QString DbManager::getDisplayQueryStr() const {
+    return "SELECT * FROM Module"; 
+}
+// Update Querymodel so select function selects the correct module within the database after changing database
+void DbManager::updateQueryModel(QSqlQueryModel *queryModel) {
+    qDebug() << "Updating query model...";
+    
+    QSqlQuery query(getDatabase());
+    query.prepare(getDisplayQueryStr());
+    query.exec();
+    queryModel->setQuery(query);
+}
+*/
 
 void DbManager::insertModule(const Module &module, QSqlDatabase &database)
 {
