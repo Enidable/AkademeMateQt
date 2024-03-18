@@ -29,7 +29,8 @@ DbInputWindow::DbInputWindow(QWidget *parent, bool isEdit) :
     xass = 0;
 
     // Open the database connection
-    DbManager::getInstance()->openDatabaseConnection();
+    dbManager = DbManager::getInstance();
+    dbManager->openDatabaseConnection();
 }
 
 DbInputWindow::~DbInputWindow()
@@ -126,20 +127,35 @@ void DbInputWindow::onSubmitButtonClicked()
     if (isEdit)
     {
         // Update the module in the database
-        DbManager::getInstance()->updateModule(module, DbManager::getInstance()->getDatabase());
+        dbManager->updateModule(module, dbManager->getDatabase());
     }
     else
     {
         // Add the module to the database
-        DbManager::getInstance()->insertModule(module, DbManager::getInstance()->getDatabase());
+        dbManager->insertModule(module, dbManager->getDatabase());
     }
 
+    // Set the dialog result to accepted
+    dialogResult = QDialog::Accepted;
     // Close input window
     close();
 }
 
+int DbInputWindow::getDialogResult() const
+{
+    return dialogResult;
+}
+
+/*
+Module DbInputWindow::getModule() const
+{
+    return module;
+}
+*/
+
 void DbInputWindow::setModule(const Module &module)
 {
+    // this->module = module;
     ui->Long_Name->setText(module.getLongName());
     ui->short_name_label->setText(module.getShortName());
     ui->Semester_select->setCurrentIndex(module.getSemester() - 1);

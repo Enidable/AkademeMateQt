@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="TStart_button">
     <property name="geometry">
      <rect>
-      <x>1260</x>
-      <y>0</y>
+      <x>1270</x>
+      <y>510</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QPushButton" name="TStop_button">
     <property name="geometry">
      <rect>
-      <x>1260</x>
-      <y>30</y>
+      <x>1270</x>
+      <y>540</y>
       <width>81</width>
       <height>24</height>
      </rect>
@@ -43,8 +43,8 @@
    <widget class="QPushButton" name="TLap_button">
     <property name="geometry">
      <rect>
-      <x>1260</x>
-      <y>60</y>
+      <x>1270</x>
+      <y>570</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -56,8 +56,8 @@
    <widget class="QPushButton" name="TReset_button">
     <property name="geometry">
      <rect>
-      <x>1260</x>
-      <y>90</y>
+      <x>1270</x>
+      <y>600</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -69,8 +69,8 @@
    <widget class="QLabel" name="labelTimer">
     <property name="geometry">
      <rect>
-      <x>1260</x>
-      <y>120</y>
+      <x>1270</x>
+      <y>630</y>
       <width>81</width>
       <height>51</height>
      </rect>
@@ -87,8 +87,8 @@
    <widget class="QTableWidget" name="LapsTable">
     <property name="geometry">
      <rect>
-      <x>1350</x>
-      <y>0</y>
+      <x>1360</x>
+      <y>510</y>
       <width>111</width>
       <height>192</height>
      </rect>
@@ -112,7 +112,7 @@
      <rect>
       <x>10</x>
       <y>650</y>
-      <width>1021</width>
+      <width>1031</width>
       <height>21</height>
      </rect>
     </property>
@@ -123,51 +123,6 @@
      <number>24</number>
     </property>
    </widget>
-   <widget class="QTableWidget" name="DetailTable">
-    <property name="geometry">
-     <rect>
-      <x>1050</x>
-      <y>0</y>
-      <width>201</width>
-      <height>211</height>
-     </rect>
-    </property>
-    <row>
-     <property name="text">
-      <string>Module</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Start date</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>End date</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Time investment</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Time estimation</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Progress</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Credentials</string>
-     </property>
-    </row>
-   </widget>
    <widget class="QTableView" name="MainTable">
     <property name="geometry">
      <rect>
@@ -177,61 +132,6 @@
       <height>641</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QTableWidget" name="variable_detail_table">
-    <property name="geometry">
-     <rect>
-      <x>1050</x>
-      <y>250</y>
-      <width>301</width>
-      <height>391</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="select_details">
-    <property name="geometry">
-     <rect>
-      <x>1050</x>
-      <y>220</y>
-      <width>201</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>-</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Assignment current time investment</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Assignment time estimation</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Exam current time investment</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Exam time estimation</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Laboratory report current time investment</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Laboratory report time estimation</string>
-     </property>
-    </item>
    </widget>
    <widget class="QPushButton" name="AddModuleButton">
     <property name="geometry">
@@ -291,6 +191,16 @@
     </property>
     <property name="text">
      <string>Delete Module</string>
+    </property>
+   </widget>
+   <widget class="QTableView" name="DetailTable">
+    <property name="geometry">
+     <rect>
+      <x>1050</x>
+      <y>0</y>
+      <width>421</width>
+      <height>501</height>
+     </rect>
     </property>
    </widget>
   </widget>

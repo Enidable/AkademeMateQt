@@ -9,6 +9,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Set the selection behavior for the table view
     ui->MainTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 
+    // Initialize the detail table view
+    MainTable = ui->MainTable;
+    DetailTable = ui->DetailTable;
+
     // Initialize the DbManager instance
     dbManager = DbManager::getInstance();
 
@@ -89,6 +93,13 @@ void MainWindow::updateLapsTable(const QStringList &laps) {
     }
 }
 
+// Displaying details in detail table
+void MainWindow::ModuleDetailClicked(const QString &abbreviation)
+{
+    QSqlQueryModel* model = dbManager->getModuleDetails(abbreviation);
+    ui->DetailTable->setModel(model);
+}
+
 //Open input window for editing and or adding modules
 void MainWindow::addModuleclicked()
 {
@@ -116,7 +127,7 @@ void MainWindow::editModuleclicked()
         DbInputWindow inputWindow(this);
         inputWindow.setModule(selectedModule);
         inputWindow.exec();
-
+        
         // Update the module in the database
         dbManager->updateModule(selectedModule, dbManager->getDatabase());
 
@@ -124,7 +135,7 @@ void MainWindow::editModuleclicked()
         dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 
         // Update the queryModel
-        //dbManager->updateQueryModel(queryModel);
+        // dbManager->updateQueryModel(queryModel);
     }
     else
     {
@@ -186,5 +197,10 @@ void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &pre
 
         // Query the database to retrieve the selected module using the abbreviation
         Module selectedModule = dbManager->selectModule(abbreviation);
+
+        // Call the ModuleDetailClicked slot with the selected module's abbreviation
+        ModuleDetailClicked(abbreviation);
+        //ModuleDetailClicked(selectedModule.getShortName()); 
+
     }
 }

@@ -40,11 +40,14 @@ private slots:
     //void updateMainTable();
     void onRowClicked(const QModelIndex &current, const QModelIndex &previous);
     void onRowChanged(const QModelIndex &current, const QModelIndex &previous);
+    void ModuleDetailClicked(const QString &abbreviation);
+    
 private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;
     QTableWidget *lapsTable;
     QTableView *MainTable;
+    QTableView *DetailTable;
     DbManager *dbManager; // Add a pointer to a DbManager instance
     DbInputWindow *dbInputwindow;
     QSqlQueryModel *queryModel;
