@@ -51,6 +51,9 @@ QSqlDatabase &DbManager::getDatabase()
 void DbManager::initializeDatabase(QSqlDatabase &database)
 {
     // Create tables / data structure
+    // this whole thing should be abandoned as it should be performed by the CreateTables.sql script
+    // maybe have code here to use CreateTables.sql if database does not contain tables
+    /*
     QSqlQuery query(database);
     if (!query.exec("CREATE TABLE IF NOT EXISTS Module ("
                     "ModuleID INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -139,6 +142,7 @@ void DbManager::initializeDatabase(QSqlDatabase &database)
     {
         qDebug() << "Time_Exam table created or already exists.";
     }
+*/
 }
 
 void DbManager::openDatabaseConnection()
@@ -253,7 +257,7 @@ void DbManager::insertModule(const Module &module, QSqlDatabase &database)
         return;
     }
 
-    query.prepare("INSERT INTO Module (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, ASS, LAB, ECTS, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO Module (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, ASS, LAB, ECTS, StatusID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     // Bind the values to the query
     query.addBindValue(module.getLongName());
     query.addBindValue(module.getShortName());
@@ -267,7 +271,11 @@ void DbManager::insertModule(const Module &module, QSqlDatabase &database)
     query.addBindValue(module.getAss());
     query.addBindValue(module.getLab());
     query.addBindValue(module.getEcts());
-    query.addBindValue(module.getStatus());
+    query.addBindValue(module.getStatusID());
+    // query.addBindValue(module.getStatusID());
+
+    qDebug() << "Inserting module with abbreviation: " << module.getShortName();
+    qDebug() << "Executing SQL: " << query.executedQuery();
 
     if (!query.exec())
     {
@@ -305,9 +313,10 @@ Module DbManager::selectModule(const QString &abbreviation)
     bool tok = query.value("TOK").toBool();
     int ass = query.value("ASS").toInt();
     bool lab = query.value("LAB").toBool();
-    QString status = query.value("Status").toString();
+    // QString status = query.value("Status").toString();
+    int statusID = query.value("StatusID").toInt();
 
-    return Module(shortName, longName, semester, startDate, endDate, timeMin, note, ects, sok, tok, ass, lab, status);
+    return Module(shortName, longName, semester, startDate, endDate, timeMin, note, ects, sok, tok, ass, lab, statusID);
 }
 
 bool DbManager::deleteModule(const QString &abbreviation, QSqlDatabase &database)
@@ -353,7 +362,7 @@ bool DbManager::updateModule(const Module &module, QSqlDatabase &database)
                   "ASS = ?, "
                   "LAB = ?, "
                   "ECTS = ?, "
-                  "Status = ? "
+                  "StatusID = ? "
                   "WHERE Abbreviation = ?");
 
     // Bind the values to the query
@@ -368,8 +377,11 @@ bool DbManager::updateModule(const Module &module, QSqlDatabase &database)
     query.addBindValue(module.getAss());
     query.addBindValue(module.getLab());
     query.addBindValue(module.getEcts());
-    query.addBindValue(module.getStatus());
+    query.addBindValue(module.getStatusID());
     query.addBindValue(module.getShortName());
+
+    qDebug() << "Updating module with abbreviation: " << module.getShortName();
+    qDebug() << "Executing SQL: " << query.executedQuery();
 
     if (!query.exec())
     {

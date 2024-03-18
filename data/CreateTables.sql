@@ -52,9 +52,9 @@ CREATE TABLE Times (
   FOREIGN KEY (TimeCatID) REFERENCES TimeCategory(TimeCatID)
 );
 
-INSERT INTO Status (StatusID, Status) VALUES (1, 'Inactive');
-INSERT INTO Status (StatusID, Status) VALUES (2, 'Active');
-INSERT INTO Status (StatusID, Status) VALUES (3, 'Completed');
+INSERT INTO Status (StatusID, Status) VALUES (1, 'inactive');
+INSERT INTO Status (StatusID, Status) VALUES (2, 'active');
+INSERT INTO Status (StatusID, Status) VALUES (3, 'completed');
 
 INSERT INTO PerformanceType (PerfTypeID, PerfType) VALUES (1, 'Exam');
 INSERT INTO PerformanceType (PerfTypeID, PerfType) VALUES (2, 'Assignment');
