@@ -1,12 +1,12 @@
 #include "module.h"
 
-Module::Module(): shortName(""), longName(""), semester(0), startDate(QDate()), endDate(QDate()), timeMin(0), note(0.0), ects(0), sok(false), tok(false), ass(0), lab(false), status("")
+Module::Module(): shortName(""), longName(""), semester(0), startDate(QDate()), endDate(QDate()), timeMin(0), note(0.0), ects(0), sok(false), tok(false), ass(0), lab(false), statusID(1)
 {
 }
 
 
-Module::Module(const QString& shortName, const QString& longName, int semester, const QDate& startDate, const QDate& endDate, int timeMin, double note, int ects, bool sok, bool tok, int ass, bool lab, const QString& status)
-    : shortName(shortName), longName(longName), semester(semester), startDate(startDate), endDate(endDate), timeMin(timeMin), note(note), ects(ects), sok(sok), tok(tok), ass(ass), lab(lab), status(status)
+Module::Module(const QString& shortName, const QString& longName, int semester, const QDate& startDate, const QDate& endDate, int timeMin, double note, int ects, bool sok, bool tok, int ass, bool lab, int statusID)
+    : shortName(shortName), longName(longName), semester(semester), startDate(startDate), endDate(endDate), timeMin(timeMin), note(note), ects(ects), sok(sok), tok(tok), ass(ass), lab(lab), statusID(statusID)
 {}
 
 QString Module::getShortName() const { return shortName; }
@@ -21,7 +21,9 @@ bool Module::getSok() const { return sok; }
 bool Module::getTok() const { return tok; }
 int Module::getAss() const { return ass; }
 bool Module::getLab() const { return lab; }
-QString Module::getStatus() const { return status; }
+
+// use getStatusID in DbInputWindow instead if needed
+// QString Module::getStatusID() const { return status; } 
 
 void Module::setShortName(const QString& shortName) { this->shortName = shortName; }
 void Module::setLongName(const QString& longName) { this->longName = longName; }
@@ -35,4 +37,4 @@ void Module::setSok(bool sok) { this->sok = sok; }
 void Module::setTok(bool tok) { this->tok = tok; }
 void Module::setAss(int ass) { this->ass = ass; }
 void Module::setLab(bool lab) { this->lab = lab; }
-void Module::setStatus(const QString& status) { this->status = status; }
+void Module::setStatus(int statusID) { this->statusID = statusID; }

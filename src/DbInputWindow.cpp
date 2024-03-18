@@ -37,6 +37,34 @@ DbInputWindow::~DbInputWindow()
     delete ui;
 }
 
+int getStatusID(const QString &status)
+{
+    if (status == "inactive")
+        return 1;
+    else if (status == "active")
+        return 2;
+    else if (status == "completed")
+        return 3;
+    else
+        return 1; // default ststus is inactive
+}
+
+QString getStatusText(int statusID)
+{
+    switch (statusID)
+    {
+        case 1:
+            return "inactive";
+        case 2:
+            return "active";
+        case 3:
+            return "completed";
+        default:
+            return "inactive"; // Set default to "Inactive"
+    }
+}
+
+
 void DbInputWindow::onSubmitButtonClicked()
 {
     // Get input values from the fields
@@ -51,7 +79,7 @@ void DbInputWindow::onSubmitButtonClicked()
     QString short_name = ui->short_name_label->text();
     qDebug() << "Short name:" << short_name;
 
-    int semester = ui->Semester_select->currentIndex() + 1; // +1 because the first item is "-"
+    int semester = ui->Semester_select->currentIndex(); // +1 because the first item is "-"
     qDebug() << "Semester:" << semester;
 
     QDate start_date = ui->Start_dateEdit->date();
@@ -92,7 +120,7 @@ void DbInputWindow::onSubmitButtonClicked()
     qDebug() << "ASS:" << xass;
 
     // Create a Module object
-    Module module(short_name, long_name, semester, start_date, end_date, time_min, note, ects, xsok, xtok, xass, xlab, status);
+    Module module(short_name, long_name, semester, start_date, end_date, time_min, note, ects, xsok, xtok, xass, xlab, getStatusID (status));
     
    // Check if the input window is for editing a module
     if (isEdit)
@@ -123,7 +151,7 @@ void DbInputWindow::setModule(const Module &module)
     ui->M_K_A_select->setCurrentText(module.getSok() ? "Sofort Online Klausur" : module.getTok() ? "Termin Online Klausur" : "");
     ui->M_K_A_select_2->setCurrentText(module.getAss() > 0 ? "Assignment" : module.getLab() ? "Laboratory report" : "");
     ui->ECTS_Box->setCurrentText(QString::number(module.getEcts()));
-    ui->status_box->setCurrentText(module.getStatus());
+    ui->status_box->setCurrentText(getStatusText(module.getStatusID()));
 
     isEdit = true;
 }
