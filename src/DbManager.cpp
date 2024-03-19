@@ -305,7 +305,28 @@ QSqlQueryModel* DbManager::getModuleDetails(const QString& abbreviation)
     QSqlQuery query(database); // Assuming database is a member variable of DbManager
 
     // Prepare the query with placeholder for abbreviation
-    query.prepare("SELECT * FROM Module WHERE Abbreviation = :Abbreviation");
+    // query.prepare("SELECT * FROM Module WHERE Abbreviation = :Abbreviation");
+query.prepare(R"(
+  SELECT
+    m.Module AS ModuleName,
+    tc.Category AS TimeCategoryName,
+    pt.PerfType AS PerformanceTypeName,
+    pa.PerfAssName AS PerformanceAssessmentName,
+    t.Investment,
+    t.Estimation
+  FROM
+    Times t
+  JOIN
+    Module m ON t.ModuleID = m.ModuleID
+  JOIN
+    TimeCategory tc ON t.TimeCatID = tc.TimeCatID
+  JOIN
+    PerformanceAssessment pa ON t.PerfAssID = pa.PerfAssID
+  JOIN
+    PerformanceType pt ON pa.PerfTypeID = pt.PerfTypeID
+  WHERE
+    m.Abbreviation = :Abbreviation
+)");
     
     // Bind the abbreviation parameter
     query.bindValue(":Abbreviation", abbreviation);
