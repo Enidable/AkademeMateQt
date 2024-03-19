@@ -12,6 +12,7 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQueryModel>
 #include <QDebug>
+#include <QtGui/QColor>
 #include "ColorDelegate.h"
 #include "DbManager.h"
 #include "DbInputWindow.h"
@@ -35,14 +36,23 @@ private slots:
 
     // Tables
     void addModuleclicked();
+    void editModuleclicked();
+    void deleteModuleclicked();
+    //void updateMainTable();
     void onRowClicked(const QModelIndex &current, const QModelIndex &previous);
+    void onRowChanged(const QModelIndex &current, const QModelIndex &previous);
+    void ModuleDetailClicked(const QString &abbreviation);
+    
 private:
     Ui::MainWindow *ui;
     StudyTimer *studyTimer;
     QTableWidget *lapsTable;
     QTableView *MainTable;
+    QTableView *DetailTable;
+    QLabel *Title;
     DbManager *dbManager; // Add a pointer to a DbManager instance
     DbInputWindow *dbInputwindow;
     QSqlQueryModel *queryModel;
+    int selectedRow;
 };
 #endif // MAINWINDOW_H

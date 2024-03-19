@@ -22,7 +22,7 @@ DbManager::DbManager(QObject *parent) : QObject(parent)
     openDatabaseConnection();
 
     // Initialize the database tables
-    initializeDatabase(database);
+    // initializeDatabase(database);
 }
 
 DbManager::~DbManager()
@@ -48,98 +48,10 @@ QSqlDatabase &DbManager::getDatabase()
     return database;
 }
 
-void DbManager::initializeDatabase(QSqlDatabase &database)
-{
-    // Create tables / data structure
-    QSqlQuery query(database);
-    if (!query.exec("CREATE TABLE IF NOT EXISTS Module ("
-                    "ModuleID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "Module TEXT,"
-                    "Abbreviation TEXT KEY,"
-                    "Semester INTEGER,"
-                    "Start DATE,"
-                    "End DATE,"
-                    "Minutes INTEGER,"
-                    "Note TEXT,"
-                    "SOK BOOLEAN,"
-                    "TOK BOOLEAN,"
-                    "ASS INTEGER,"
-                    "LAB BOOLEAN,"
-                    "ECTS INTEGER,"
-                    "Status TEXT,"
-                    "UNIQUE (Abbreviation))"))
-    {
-        qDebug() << "Failed to create Module table: " << query.lastError();
-    }
-    else
-    {
-        qDebug() << "Module table created or already exists.";
-    }
-
-    if (!query.exec("CREATE TABLE IF NOT EXISTS Assignment_Laboratory_report ("
-                    "AssID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "ModuleID INTEGER,"
-                    "AssName TEXT,"
-                    "Type TEXT,"
-                    "Status TEXT,"
-                    "FOREIGN KEY (ModuleID) REFERENCES Module (ModuleID))"))
-    {
-        qDebug() << "Failed to create Assignment_Laboratory_report table: " << query.lastError();
-    }
-    else
-    {
-        qDebug() << "Assignment_Laboratory_report table created or already exists.";
-    }
-
-    if (!query.exec("CREATE TABLE IF NOT EXISTS Exam ("
-                    "ExamID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "ModuleID INTEGER,"
-                    "ExamName TEXT,"
-                    "Status TEXT,"
-                    "FOREIGN KEY (ModuleID) REFERENCES Module (ModuleID))"))
-    {
-        qDebug() << "Failed to create Exam table: " << query.lastError();
-    }
-    else
-    {
-        qDebug() << "Exam table created or already exists.";
-    }
-
-    if (!query.exec("CREATE TABLE IF NOT EXISTS Time_ASS ("
-                    "AssID INTEGER,"
-                    "timeType TEXT,"
-                    "research INTEGER,"
-                    "application INTEGER,"
-                    "writeAndCreate INTEGER,"
-                    "proofreading INTEGER,"
-                    "timeAss INTEGER,"
-                    "FOREIGN KEY (AssID) REFERENCES Assignment_Laboratory_report (AssID))"))
-    {
-        qDebug() << "Failed to create Time_ASS table: " << query.lastError();
-    }
-    else
-    {
-        qDebug() << "Time_ASS table created or already exists.";
-    }
-
-    if (!query.exec("CREATE TABLE IF NOT EXISTS Time_Exam ("
-                    "ExamID INTEGER,"
-                    "timeType TEXT,"
-                    "studying INTEGER,"
-                    "studyLetters INTEGER,"
-                    "practice INTEGER,"
-                    "StudyingForExam INTEGER,"
-                    "exam INTEGER,"
-                    "timeExam INTEGER,"
-                    "FOREIGN KEY (ExamID) REFERENCES Exam (ExamID))"))
-    {
-        qDebug() << "Failed to create Time_Exam table: " << query.lastError();
-    }
-    else
-    {
-        qDebug() << "Time_Exam table created or already exists.";
-    }
-}
+/*
+ void DbManager::initializeDatabase(QSqlDatabase &database)
+{}
+*/
 
 void DbManager::openDatabaseConnection()
 {
@@ -176,7 +88,7 @@ QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDat
 
     // Set the bullet point character
     // possible characters: ✓ ✔ ● ☑ ✗ ☒ ✖ ◇ ◆  ◉ ◈
-    const QString bulletPoint = "◆";    // make this configurable
+    const QString bulletPoint = "✖";    // make this configurable
 
     // QString queryStr = "SELECT * FROM \"Module\""; // Make table variable!!! So function can be used for variaty of tables
     QString queryStr = QStringLiteral(R"(
@@ -228,6 +140,19 @@ QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDat
     return model;
 }
 
+/*
+void DbManager::updateQueryModel(QSqlQueryModel *queryModel)
+{
+    QSqlQuery query(QString("SELECT * FROM Module"), getDatabase());
+    if (!query.exec()) {
+        qDebug() << "Error: Unable to execute query";
+        qDebug() << "Last error: " << query.lastError();
+        return;
+    }
+
+    queryModel->setQuery(query);
+}
+*/
 
 void DbManager::insertModule(const Module &module, QSqlDatabase &database)
 {
@@ -239,7 +164,7 @@ void DbManager::insertModule(const Module &module, QSqlDatabase &database)
         return;
     }
 
-    query.prepare("INSERT INTO Module (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, ASS, LAB, ECTS, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO Module (Module, Abbreviation, Semester, Start, End, Minutes, Note, SOK, TOK, ASS, LAB, ECTS, StatusID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     // Bind the values to the query
     query.addBindValue(module.getLongName());
     query.addBindValue(module.getShortName());
@@ -253,7 +178,11 @@ void DbManager::insertModule(const Module &module, QSqlDatabase &database)
     query.addBindValue(module.getAss());
     query.addBindValue(module.getLab());
     query.addBindValue(module.getEcts());
-    query.addBindValue(module.getStatus());
+    query.addBindValue(module.getStatusID());
+    // query.addBindValue(module.getStatusID());
+
+    qDebug() << "Inserting module with abbreviation: " << module.getShortName();
+    qDebug() << "Executing SQL: " << query.executedQuery();
 
     if (!query.exec())
     {
@@ -279,7 +208,6 @@ Module DbManager::selectModule(const QString &abbreviation)
     }
 
     // Retrieve the module data from the query and create a new Module object
-    // Make sure to update the following lines with the correct column names and data types
     QString shortName = query.value("Abbreviation").toString();
     QString longName = query.value("Module").toString();
     int semester = query.value("Semester").toInt();
@@ -292,7 +220,137 @@ Module DbManager::selectModule(const QString &abbreviation)
     bool tok = query.value("TOK").toBool();
     int ass = query.value("ASS").toInt();
     bool lab = query.value("LAB").toBool();
-    QString status = query.value("Status").toString();
+    // QString status = query.value("Status").toString();
+    int statusID = query.value("StatusID").toInt();
 
-    return Module(shortName, longName, semester, startDate, endDate, timeMin, note, ects, sok, tok, ass, lab, status);
+    return Module(shortName, longName, semester, startDate, endDate, timeMin, note, ects, sok, tok, ass, lab, statusID);
+}
+
+bool DbManager::deleteModule(const QString &abbreviation, QSqlDatabase &database)
+{
+    if (!database.isOpen())
+    {
+        qDebug() << "Error: Database not open";
+        return false;
+    }
+
+    QSqlQuery query(database);
+    query.prepare("DELETE FROM Module WHERE Abbreviation = ?");
+    query.addBindValue(abbreviation);
+
+    if (!query.exec())
+    {
+        qDebug() << "Error: Unable to delete module from database";
+        qDebug() << "Last error: " << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+bool DbManager::updateModule(const Module &module, QSqlDatabase &database)
+{
+    if (!database.isOpen())
+    {
+        qDebug() << "Error: Database not open";
+        return false;
+    }
+
+    QSqlQuery query(database);
+    query.prepare("UPDATE Module SET "
+                  "Module = ?, "
+                  "Semester = ?, "
+                  "Start = ?, "
+                  "End = ?, "
+                  "Minutes = ?, "
+                  "Note = ?, "
+                  "SOK = ?, "
+                  "TOK = ?, "
+                  "ASS = ?, "
+                  "LAB = ?, "
+                  "ECTS = ?, "
+                  "StatusID = ? "
+                  "WHERE Abbreviation = ?");
+
+    // Bind the values to the query
+    query.addBindValue(module.getLongName());
+    query.addBindValue(module.getSemester());
+    query.addBindValue(module.getStartDate());
+    query.addBindValue(module.getEndDate());
+    query.addBindValue(module.getTimeMin());
+    query.addBindValue(module.getNote());
+    query.addBindValue(module.getSok());
+    query.addBindValue(module.getTok());
+    query.addBindValue(module.getAss());
+    query.addBindValue(module.getLab());
+    query.addBindValue(module.getEcts());
+    query.addBindValue(module.getStatusID());
+    query.addBindValue(module.getShortName());
+
+    qDebug() << "Updating module with abbreviation: " << module.getShortName();
+    qDebug() << "Executing SQL: " << query.executedQuery();
+
+    if (!query.exec())
+    {
+        qDebug() << "Error: Unable to update module in database";
+        qDebug() << "Last error: " << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+QSqlQueryModel* DbManager::getModuleDetails(const QString& abbreviation)
+{
+    QSqlQuery query(database); // Assuming database is a member variable of DbManager
+
+    // Prepare the query with placeholder for abbreviation
+    // query.prepare("SELECT * FROM Module WHERE Abbreviation = :Abbreviation");
+query.prepare(R"(
+  SELECT
+    m.Module AS ModuleName,
+    tc.Category AS TimeCategoryName,
+    pt.PerfType AS PerformanceTypeName,
+    pa.PerfAssName AS PerformanceAssessmentName,
+    t.Investment,
+    t.Estimation
+  FROM
+    Times t
+  JOIN
+    Module m ON t.ModuleID = m.ModuleID
+  JOIN
+    TimeCategory tc ON t.TimeCatID = tc.TimeCatID
+  JOIN
+    PerformanceAssessment pa ON t.PerfAssID = pa.PerfAssID
+  JOIN
+    PerformanceType pt ON pa.PerfTypeID = pt.PerfTypeID
+  WHERE
+    m.Abbreviation = :Abbreviation
+)");
+    
+    // Bind the abbreviation parameter
+    query.bindValue(":Abbreviation", abbreviation);
+    
+    // Execute the query
+    if (!query.exec())
+    {
+        qDebug() << "Error executing query:" << query.lastError().text();
+        return nullptr; // Return null if query execution fails
+    }
+
+    // Create a QSqlQueryModel to hold the query result
+    QSqlQueryModel* model = new QSqlQueryModel();
+    
+    // Set the query to the model
+    model->setQuery(query);
+    
+    // Check if there were any errors in setting the query
+    if (model->lastError().isValid())
+    {
+        qDebug() << "Error setting query to model:" << model->lastError().text();
+        delete model; // Clean up and delete the model
+        return nullptr;
+    }
+
+    return model;
 }

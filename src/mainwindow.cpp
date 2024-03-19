@@ -2,14 +2,24 @@
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this)), dbInputwindow(new DbInputWindow(this))
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), studyTimer(new StudyTimer(this)), dbInputwindow(new DbInputWindow(this)), selectedRow(-1)
 {
     ui->setupUi(this);
 
+    // Set the selection behavior for the table view
+    ui->MainTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    // Initialize the detail table view
+    MainTable = ui->MainTable;
+    DetailTable = ui->DetailTable;
+
+    // Initialize the DbManager instance
+    dbManager = DbManager::getInstance();
+
     // Open the database connection
-    DbManager::getInstance()->openDatabaseConnection();
+    dbManager->openDatabaseConnection();
         // Display the database in the table view
-    queryModel = DbManager::getInstance()->displayDatabaseInTable(ui->MainTable, DbManager::getInstance()->getDatabase());
+    queryModel = dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
 
     // Connect buttons to functions
     connect(ui->TStart_button, &QPushButton::clicked, studyTimer, &StudyTimer::start);
@@ -21,19 +31,28 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(studyTimer, &StudyTimer::timerUpdated, this, &MainWindow::updateTimerLabel);
     connect(studyTimer, &StudyTimer::lapsUpdated, this, &MainWindow::updateLapsTable);
 
-    // Add or edit module button to function
+    // Buttons for adding/editing/deleting modules
     connect(ui->AddModuleButton, &QPushButton::clicked, this, &MainWindow::addModuleclicked);
+    connect(ui->EditModuleButton, &QPushButton::clicked, this, &MainWindow::editModuleclicked);
+    connect(ui->DeleteModuleButton, &QPushButton::clicked, this, &MainWindow::deleteModuleclicked);
 
-    // Set the query model for the table view
-    //queryModel = new QSqlQueryModel(this);
-    //ui->MainTable->setModel(queryModel);
-    // Connect the clicked signal to the onRowClicked slot
-    connect(ui->MainTable->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::onRowClicked);
+    connect(ui->MainTable->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::onRowClicked);
 
     lapsTable = ui->LapsTable;
     // Set individual column widths
     lapsTable->setColumnWidth(0, 30);
     lapsTable->setColumnWidth(1, 60);
+
+    // Change the color of the QLabel named 'Title' in the MainWindow
+    QPalette palette = ui->Title->palette();
+    // Create a custom green color (#38761d or R: 56, G: 118, B: 29)
+    QColor customGreen(56, 118, 29);
+    palette.setColor(ui->Title->backgroundRole(), customGreen);
+    palette.setColor(ui->Title->foregroundRole(), customGreen);
+    ui->Title->setPalette(palette);
+
+    // Set the ColorDelegate as the item delegate for MainTable
+    ui->MainTable->setItemDelegate(new ColorDelegate(ui->MainTable));
 }
 
 MainWindow::~MainWindow()
@@ -43,7 +62,7 @@ MainWindow::~MainWindow()
     delete dbInputwindow;
 
     // Close the database connection
-    DbManager::getInstance()->getDatabase().close();
+    dbManager->getDatabase().close();
 }
 
 void MainWindow::updateTimerLabel(int seconds) {
@@ -81,27 +100,114 @@ void MainWindow::updateLapsTable(const QStringList &laps) {
     }
 }
 
+// Displaying details in detail table
+void MainWindow::ModuleDetailClicked(const QString &abbreviation)
+{
+    QSqlQueryModel* model = dbManager->getModuleDetails(abbreviation);
+    ui->DetailTable->setModel(model);
+}
+
 //Open input window for editing and or adding modules
 void MainWindow::addModuleclicked()
 {
     DbInputWindow inputWindow;
     inputWindow.exec();
-    DbManager::getInstance()->displayDatabaseInTable(ui->MainTable, DbManager::getInstance()->getDatabase());
+    dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+
+    // Update the queryModel
+    //dbManager->updateQueryModel(queryModel);
+}
+
+void MainWindow::editModuleclicked()
+{
+    // Get the selected row
+    QModelIndex currentIndex = ui->MainTable->currentIndex();
+    if (currentIndex.isValid()) // Ensure a valid row is selected
+    {
+        // Get the module abbreviation from the selected row
+        QString abbreviation = queryModel->data(queryModel->index(currentIndex.row(), 1)).toString();
+
+        // Retrieve the selected module from the database
+        Module selectedModule = dbManager->selectModule(abbreviation);
+
+        // Open input window for editing the module
+        DbInputWindow inputWindow(this);
+        inputWindow.setModule(selectedModule);
+        inputWindow.exec();
+        
+        // Update the module in the database
+        dbManager->updateModule(selectedModule, dbManager->getDatabase());
+
+        // Refresh the table view
+        dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+
+        // Update the queryModel
+        // dbManager->updateQueryModel(queryModel);
+    }
+    else
+    {
+        QMessageBox::warning(this, "Error", "No module selected.");
+    }
+}
+
+
+void MainWindow::deleteModuleclicked()
+{
+    // Get the selected row
+    QModelIndex currentIndex = ui->MainTable->currentIndex();
+    if (currentIndex.isValid()) // Ensure a valid row is selected
+    {
+        // Get the module abbreviation from the selected row
+        QString abbreviation = queryModel->data(queryModel->index(currentIndex.row(), 1)).toString();
+
+        qDebug() << "Selected row for deletion:" << currentIndex.row() << "Abbreviation:" << abbreviation;
+
+        // Delete the selected module from the database
+        if (dbManager->deleteModule(abbreviation, dbManager->getDatabase()))
+        {
+            // Refresh the table view
+            dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
+
+            // Reset the selectedRow variable
+            selectedRow = -1;
+        }
+        else
+        {
+            QMessageBox::warning(this, "Error", "Failed to delete module from database.");
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this, "Error", "No module selected.");
+    }
+}
+
+void MainWindow::onRowChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    selectedRow = current.row();
 }
 
 void MainWindow::onRowClicked(const QModelIndex &current, const QModelIndex &previous)
 {
-    // Ensure that the entire row is selected
-    ui->MainTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    if (current.isValid()) {
+        onRowChanged(current, previous);
 
-    // Get the selected row
-    int row = current.row();
-    qDebug() << "current row" << row;
+        // Get the selected row
+        int row = current.row();
+        qDebug() << "current row" << row;
 
-    // Get the module abbreviation from the selected row
-    // Adjust the column number to match the column containing the abbreviation (column 1)
-    QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+        // Get the module abbreviation from the selected row
+        // Adjust the column number to match the column containing the abbreviation (column 1)
+        QString abbreviation = queryModel->data(queryModel->index(row, 1)).toString();
+        // Print the abbreviation in the qDebug statement
+        qDebug() << "Module abbreviation:" << abbreviation;
 
-    // Query the database to retrieve the selected module using the abbreviation
-    Module selectedModule = DbManager::getInstance()->selectModule(abbreviation);
+        // Query the database to retrieve the selected module using the abbreviation
+        Module selectedModule = dbManager->selectModule(abbreviation);
+
+        // Call the ModuleDetailClicked slot with the selected module's abbreviation
+        ModuleDetailClicked(abbreviation);
+        //ModuleDetailClicked(selectedModule.getShortName()); 
+
+    }
 }

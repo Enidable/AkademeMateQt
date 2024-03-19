@@ -9,7 +9,7 @@ class Module
 public:
     // Constructors
     Module();   // Default constructor
-    Module(const QString& shortName, const QString& longName, int semester, const QDate& startDate, const QDate& endDate, int timeMin, double note, int ects, bool sok, bool tok, int ass, bool lab, const QString& status);
+    Module(const QString& shortName, const QString& longName, int semester, const QDate& startDate, const QDate& endDate, int timeMin, double note, int ects, bool sok, bool tok, int ass, bool lab, int statusID);
 
     // Getters
     QString getShortName() const;
@@ -24,7 +24,7 @@ public:
     bool getTok() const;
     int getAss() const;
     bool getLab() const;
-    QString getStatus() const;
+    int getStatusID() const { return statusID; }
 
     // Setters
     void setShortName(const QString& shortName);
@@ -39,7 +39,7 @@ public:
     void setTok(bool tok);
     void setAss(int ass);
     void setLab(bool lab);
-    void setStatus(const QString& status);
+    void setStatus(int statusID);
 
 private:
     QString shortName;
@@ -54,7 +54,7 @@ private:
     bool tok;
     int ass;
     bool lab;
-    QString status;
+    int statusID;
 };
 
 #endif // MODULE_H

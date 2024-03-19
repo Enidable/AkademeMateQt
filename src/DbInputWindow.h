@@ -21,8 +21,11 @@ class DbInputWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit DbInputWindow(QWidget *parent = nullptr);
+    explicit DbInputWindow(QWidget *parent = nullptr, bool isEdit = false);
     ~DbInputWindow();
+    void setModule(const Module &module);
+    Module getModule() const;
+    int getDialogResult() const;
 
 private slots:
     void onSubmitButtonClicked();
@@ -30,10 +33,13 @@ private slots:
 private:
     Ui::DbInputWindow *ui;
     DbManager *dbManager;
+    // Module module;
     bool xsok;
     bool xtok;
     bool xlab;
     int xass;
+    bool isEdit;
+    int dialogResult;
 };
 
 

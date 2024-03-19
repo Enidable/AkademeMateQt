@@ -2,6 +2,7 @@
 
 ColorDelegate::ColorDelegate(QObject* parent) : QStyledItemDelegate(parent) {
     // Set default colors
+    qDebug() << "ColorDelegate constructor called";
     completedColor = QColor("#d9ead3");  // Light green
     activeColor = QColor("#feefff");     // Light purple
 
@@ -12,21 +13,23 @@ ColorDelegate::ColorDelegate(QObject* parent) : QStyledItemDelegate(parent) {
 void ColorDelegate::initStyleOption(QStyleOptionViewItem* option, const QModelIndex& index) const {
     QStyledItemDelegate::initStyleOption(option, index);
 
-    // Status column has to be the last column of the table for the program to select the right column
-QString status = index.model()->data(index.model()->index(index.row(), index.model()->columnCount() - 1), Qt::DisplayRole).toString();
-/* QString statusColumnName = "Status";
-int statusColumnIndex = index.model()->query().record().indexOf(statusColumnName);
-QString status = index.model()->data(index.model()->index(index.row(), statusColumnIndex), Qt::DisplayRole).toString(); */
+    // Get the status text from the current row
+    QString statusText = index.model()->data(index.model()->index(index.row(), 13), Qt::DisplayRole).toString().trimmed();
 
- if (status == "completed") {
-        option->backgroundBrush = QBrush(completedColor);
-        option->palette.setColor(QPalette::Text, Qt::black);  // Set text color to black
-    } else if (status == "active") {
+    // Create a copy of the option's palette
+    QPalette palette = option->palette;
+
+    if (statusText == "active") {
         option->backgroundBrush = QBrush(activeColor);
-        option->palette.setColor(QPalette::Text, Qt::black);  // Set text color to black
+    } else if (statusText == "completed") {
+        option->backgroundBrush = QBrush(completedColor);
     }
-    // Possibly add more conditions for other statuses or colors
+
+    // Set the modified palette to the option
+    option->palette = palette;
 }
+
+
 
 
 QColor ColorDelegate::getCompletedColor() const {
