@@ -12,6 +12,7 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQueryModel>
 #include <QDebug>
+#include <QColor>
 #include "ColorDelegate.h"
 #include "DbManager.h"
 #include "DbInputWindow.h"
@@ -48,6 +49,7 @@ private:
     QTableWidget *lapsTable;
     QTableView *MainTable;
     QTableView *DetailTable;
+    QLabel *Title;
     DbManager *dbManager; // Add a pointer to a DbManager instance
     DbInputWindow *dbInputwindow;
     QSqlQueryModel *queryModel;

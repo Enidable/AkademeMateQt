@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1485</width>
-    <height>763</height>
+    <height>803</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="TStart_button">
     <property name="geometry">
      <rect>
-      <x>1270</x>
-      <y>510</y>
+      <x>1280</x>
+      <y>550</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QPushButton" name="TStop_button">
     <property name="geometry">
      <rect>
-      <x>1270</x>
-      <y>540</y>
+      <x>1280</x>
+      <y>580</y>
       <width>81</width>
       <height>24</height>
      </rect>
@@ -43,8 +43,8 @@
    <widget class="QPushButton" name="TLap_button">
     <property name="geometry">
      <rect>
-      <x>1270</x>
-      <y>570</y>
+      <x>1280</x>
+      <y>610</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -56,8 +56,8 @@
    <widget class="QPushButton" name="TReset_button">
     <property name="geometry">
      <rect>
-      <x>1270</x>
-      <y>600</y>
+      <x>1280</x>
+      <y>640</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -69,8 +69,8 @@
    <widget class="QLabel" name="labelTimer">
     <property name="geometry">
      <rect>
-      <x>1270</x>
-      <y>630</y>
+      <x>1280</x>
+      <y>670</y>
       <width>81</width>
       <height>51</height>
      </rect>
@@ -87,8 +87,8 @@
    <widget class="QTableWidget" name="LapsTable">
     <property name="geometry">
      <rect>
-      <x>1360</x>
-      <y>510</y>
+      <x>1370</x>
+      <y>550</y>
       <width>111</width>
       <height>192</height>
      </rect>
@@ -110,8 +110,8 @@
    <widget class="QProgressBar" name="progressBar_All">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>650</y>
+      <x>20</x>
+      <y>690</y>
       <width>1031</width>
       <height>21</height>
      </rect>
@@ -126,8 +126,8 @@
    <widget class="QTableView" name="MainTable">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>10</x>
+      <y>40</y>
       <width>1041</width>
       <height>641</height>
      </rect>
@@ -136,8 +136,8 @@
    <widget class="QPushButton" name="AddModuleButton">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>680</y>
+      <x>930</x>
+      <y>720</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -156,8 +156,8 @@
    <widget class="QPushButton" name="EditModuleButton">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>680</y>
+      <x>800</x>
+      <y>720</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -176,8 +176,8 @@
    <widget class="QPushButton" name="DeleteModuleButton">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>680</y>
+      <x>20</x>
+      <y>720</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -196,11 +196,31 @@
    <widget class="QTableView" name="DetailTable">
     <property name="geometry">
      <rect>
-      <x>1050</x>
-      <y>0</y>
+      <x>1060</x>
+      <y>40</y>
       <width>421</width>
       <height>501</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Title">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>201</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <italic>true</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>AkademeMate</string>
     </property>
    </widget>
   </widget>
@@ -210,7 +230,7 @@
      <x>0</x>
      <y>0</y>
      <width>1485</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

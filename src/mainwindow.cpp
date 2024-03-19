@@ -46,6 +46,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Set individual column widths
     lapsTable->setColumnWidth(0, 30);
     lapsTable->setColumnWidth(1, 60);
+
+    // Change the color of the QLabel named 'Title' in the MainWindow
+    QPalette palette = ui->Title->palette();
+    // Create a custom green color (#38761d or R: 56, G: 118, B: 29)
+    QColor customGreen(56, 118, 29);
+    palette.setColor(ui->Title->backgroundRole(), customGreen);
+    palette.setColor(ui->Title->foregroundRole(), customGreen);
+    ui->Title->setPalette(palette);
 }
 
 MainWindow::~MainWindow()
