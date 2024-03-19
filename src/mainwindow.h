@@ -12,7 +12,7 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQueryModel>
 #include <QDebug>
-#include <QColor>
+#include <QtGui/QColor>
 #include "ColorDelegate.h"
 #include "DbManager.h"
 #include "DbInputWindow.h"

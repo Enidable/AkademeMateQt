@@ -4,9 +4,13 @@
 #include <QtWidgets/QStyledItemDelegate>
 #include <QtGui/QColor>
 #include <QtGui/QBrush>
+#include <QtGui/QPalette>
 #include <QtCore/QSettings>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
+#include <QDebug>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 class ColorDelegate : public QStyledItemDelegate {
 public:

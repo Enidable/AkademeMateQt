@@ -32,6 +32,8 @@ set(PROJECT_SOURCES
     src/Module.cpp
     src/Calculations.h
     src/Calculations.cpp
+    src/ColorDelegate.h
+    src/ColorDelegate.cpp
 )
 
 set(PROJECT_UIS

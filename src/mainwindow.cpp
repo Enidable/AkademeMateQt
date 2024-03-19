@@ -36,10 +36,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->EditModuleButton, &QPushButton::clicked, this, &MainWindow::editModuleclicked);
     connect(ui->DeleteModuleButton, &QPushButton::clicked, this, &MainWindow::deleteModuleclicked);
 
-    // Set the query model for the table view
-    //queryModel = new QSqlQueryModel(this);
-    //ui->MainTable->setModel(queryModel);
-    // Connect the clicked signal to the onRowClicked slot
     connect(ui->MainTable->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::onRowClicked);
 
     lapsTable = ui->LapsTable;
@@ -54,6 +50,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     palette.setColor(ui->Title->backgroundRole(), customGreen);
     palette.setColor(ui->Title->foregroundRole(), customGreen);
     ui->Title->setPalette(palette);
+
+    // Set the ColorDelegate as the item delegate for MainTable
+    ui->MainTable->setItemDelegate(new ColorDelegate(ui->MainTable));
 }
 
 MainWindow::~MainWindow()
