@@ -21,7 +21,7 @@ erDiagram
   Module {
     INTEGER ModuleID PK
     TEXT Module
-    TEXT Abbreviation
+    TEXT Abbreviation UK
     INTEGER Semester
     DATE Start
     DATE End
