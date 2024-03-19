@@ -2,7 +2,6 @@
 
 ColorDelegate::ColorDelegate(QObject* parent) : QStyledItemDelegate(parent) {
     // Set default colors
-    qDebug() << "ColorDelegate constructor called";
     completedColor = QColor("#d9ead3");  // Light green
     activeColor = QColor("#feefff");     // Light purple
 
