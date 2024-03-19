@@ -1,3 +1,9 @@
+/**
+ * @file MainWindow.h
+ * @brief Header file for the MainWindow class.
+ * 
+ * This class represents the main window of the application. It handles user interactions, displays various UI elements, and manages the database operations.
+ */
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
