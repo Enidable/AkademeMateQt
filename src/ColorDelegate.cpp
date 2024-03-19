@@ -29,27 +29,6 @@ void ColorDelegate::initStyleOption(QStyleOptionViewItem* option, const QModelIn
     option->palette = palette;
 }
 
-
-
-
-QColor ColorDelegate::getCompletedColor() const {
-    return completedColor;
-}
-// The color should be set with the hexadecimal representation
-void ColorDelegate::setCompletedColor(const QColor& color) {
-    completedColor = color;
-    saveColorPreferences();
-}
-
-QColor ColorDelegate::getActiveColor() const {
-    return activeColor;
-}
-// The color should be set with the hexadecimal representation
-void ColorDelegate::setActiveColor(const QColor& color) {
-    activeColor = color;
-    saveColorPreferences();
-}
-
 // Load program with the previous color preference
 void ColorDelegate::loadColorPreferences() {
     QSettings settings;

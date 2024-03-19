@@ -55,6 +55,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->MainTable->setItemDelegate(new ColorDelegate(ui->MainTable));
 }
 
+/**
+ * @brief Destructor for the MainWindow class.
+ * 
+ * Cleans up resources and closes the database connection.
+ */
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -100,22 +106,17 @@ void MainWindow::updateLapsTable(const QStringList &laps) {
     }
 }
 
-// Displaying details in detail table
 void MainWindow::ModuleDetailClicked(const QString &abbreviation)
 {
     QSqlQueryModel* model = dbManager->getModuleDetails(abbreviation);
     ui->DetailTable->setModel(model);
 }
 
-//Open input window for editing and or adding modules
 void MainWindow::addModuleclicked()
 {
     DbInputWindow inputWindow;
     inputWindow.exec();
     dbManager->displayDatabaseInTable(ui->MainTable, dbManager->getDatabase());
-
-    // Update the queryModel
-    //dbManager->updateQueryModel(queryModel);
 }
 
 void MainWindow::editModuleclicked()
@@ -149,7 +150,6 @@ void MainWindow::editModuleclicked()
         QMessageBox::warning(this, "Error", "No module selected.");
     }
 }
-
 
 void MainWindow::deleteModuleclicked()
 {

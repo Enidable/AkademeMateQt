@@ -4,6 +4,13 @@
 #include <QString>
 #include <QDate>
 
+/**
+ * @brief The Module class temporarily stores the values of a module
+ * 
+ * This class encapsulates various attributes of a module, such as its name, semester,
+ * start and end dates, duration, note, ECTS points, and status.
+ */
+
 class Module
 {
 public:

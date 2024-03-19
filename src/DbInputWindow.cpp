@@ -10,8 +10,6 @@ DbInputWindow::DbInputWindow(QWidget *parent, bool isEdit) :
 
     // Set default values for start_date and end_date
     QDate currentDate = QDate::currentDate();
-    // ui->Start_dateEdit->setDate(currentDate);
-    // ui->End_dateEdit->setDate(currentDate.addDays(42));
 
     // Set calendarPopup attribute to true and set an empty QDate as default value
     ui->Start_dateEdit->setCalendarPopup(true);
@@ -135,23 +133,9 @@ void DbInputWindow::onSubmitButtonClicked()
         dbManager->insertModule(module, dbManager->getDatabase());
     }
 
-    // Set the dialog result to accepted
-    dialogResult = QDialog::Accepted;
     // Close input window
     close();
 }
-
-int DbInputWindow::getDialogResult() const
-{
-    return dialogResult;
-}
-
-/*
-Module DbInputWindow::getModule() const
-{
-    return module;
-}
-*/
 
 void DbInputWindow::setModule(const Module &module)
 {

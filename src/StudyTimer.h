@@ -5,6 +5,12 @@
 #include <QWidget>
 #include <QObject>
 
+/**
+ * @brief The StudyTimer class creates a timer for tracking study sessions.
+ * 
+ * This class utilizes std::chrono for time calculations and QTimer for handling intervals.
+ */
+
 class QTimer;                                   // Forward declaration of QTimer class
 
 class StudyTimer : public QObject {

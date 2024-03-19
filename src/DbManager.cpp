@@ -20,9 +20,6 @@ DbManager::DbManager(QObject *parent) : QObject(parent)
 
     // Open the database connection
     openDatabaseConnection();
-
-    // Initialize the database tables
-    // initializeDatabase(database);
 }
 
 DbManager::~DbManager()
@@ -30,9 +27,6 @@ DbManager::~DbManager()
     // Close the database connection
     database.close();
 }
-/* // Add the SQLite driver
-QSqlDatabase DbManager::database = QSqlDatabase::addDatabase("QSQLITE"); */
-
 
 // Get the instance of the DbManager Object
 DbManager* DbManager::getInstance()
@@ -47,11 +41,6 @@ QSqlDatabase &DbManager::getDatabase()
 {
     return database;
 }
-
-/*
- void DbManager::initializeDatabase(QSqlDatabase &database)
-{}
-*/
 
 void DbManager::openDatabaseConnection()
 {
@@ -139,20 +128,6 @@ QSqlQueryModel* DbManager::displayDatabaseInTable(QTableView *tableView, QSqlDat
 
     return model;
 }
-
-/*
-void DbManager::updateQueryModel(QSqlQueryModel *queryModel)
-{
-    QSqlQuery query(QString("SELECT * FROM Module"), getDatabase());
-    if (!query.exec()) {
-        qDebug() << "Error: Unable to execute query";
-        qDebug() << "Last error: " << query.lastError();
-        return;
-    }
-
-    queryModel->setQuery(query);
-}
-*/
 
 void DbManager::insertModule(const Module &module, QSqlDatabase &database)
 {
